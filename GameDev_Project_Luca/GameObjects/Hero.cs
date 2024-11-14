@@ -27,7 +27,7 @@ namespace GameDev_Project_Luca.GameObjects
             this.inputreader = inputreader;
             animation = new Animation.Animation();
             //animation.AddFrame();
-            //Add spritesheet and add animationframes!!!
+            //TODO: Add spritesheet and add animationframes!!!
             position = new Vector2(0, 0);
             speed = new Vector2(1, 1);
         }
