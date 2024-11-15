@@ -3,6 +3,7 @@ using GameDev_Project_Luca.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace GameDev_Project_Luca
@@ -24,6 +25,8 @@ namespace GameDev_Project_Luca
             //_graphics.PreferredBackBufferWidth = 1920;
             //_graphics.PreferredBackBufferHeight = 1080;
             //_graphics.IsFullScreen = true;
+            IsFixedTimeStep = true; //fps lock
+            TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
         }
 
         protected override void Initialize()
