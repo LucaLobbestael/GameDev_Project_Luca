@@ -35,7 +35,7 @@ namespace GameDev_Project_Luca
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            // TODO: load spritesheet 
+            _texture = Content.Load<Texture2D>("Hedgehog Sprite Sheet");
             InitializeGameObjects();
         }
 

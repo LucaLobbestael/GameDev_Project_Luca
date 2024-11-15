@@ -22,9 +22,9 @@ namespace GameDev_Project_Luca.Input
             if (state.IsKeyDown(Keys.Right))
                 direction.X += 1;
             if (state.IsKeyDown(Keys.Up))
-                direction.X -= 1;
+                direction.Y -= 1;
             if (state.IsKeyDown(Keys.Down))
-                direction.X += 1;
+                direction.Y += 1;
             return direction;
         }
     }

@@ -26,8 +26,10 @@ namespace GameDev_Project_Luca.GameObjects
             heroTexture = texture;
             this.inputreader = inputreader;
             animation = new Animation.Animation();
-            //animation.AddFrame();
-            //TODO: Add spritesheet and add animationframes!!!
+            animation.AddFrame(new Animation.AnimationFrame(new Rectangle(0,0,32,32)));
+            animation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 0, 32, 32)));
+            animation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 0, 32, 32)));
+            animation.AddFrame(new Animation.AnimationFrame(new Rectangle(96, 0, 32, 32)));
             position = new Vector2(0, 0);
             speed = new Vector2(1, 1);
         }
