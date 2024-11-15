@@ -3,6 +3,7 @@ using GameDev_Project_Luca.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace GameDev_Project_Luca
 {
@@ -12,6 +13,8 @@ namespace GameDev_Project_Luca
         private SpriteBatch _spriteBatch;
         private Texture2D _texture;
         Hero hero;
+        Texture2D blockTexture;
+        Rectangle block = new Rectangle(0, 60, 100, 5);
 
         public Game1()
         {
@@ -26,13 +29,14 @@ namespace GameDev_Project_Luca
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            blockTexture = new Texture2D(GraphicsDevice, 1, 1);
+            blockTexture.SetData(new[] { Color.White });
 
             // TODO: use this.Content to load your game content here
             _texture = Content.Load<Texture2D>("Hedgehog Sprite Sheet");
@@ -42,13 +46,14 @@ namespace GameDev_Project_Luca
         private void InitializeGameObjects()
         {
             hero = new Hero(_texture, new KeyboardReader());
+            hero.block = block;
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            
             // TODO: Add your update logic here
             hero.Update(gameTime);
             base.Update(gameTime);
@@ -61,6 +66,7 @@ namespace GameDev_Project_Luca
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
             hero.Draw(_spriteBatch);
+            _spriteBatch.Draw(blockTexture, block,Color.Red);
             _spriteBatch.End();
 
             base.Draw(gameTime);
