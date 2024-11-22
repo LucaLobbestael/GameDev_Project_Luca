@@ -17,6 +17,7 @@ namespace GameDev_Project_Luca.GameObjects
         Animation.Animation animation;
         Animation.Animation idleAnimation;
         Animation.Animation walkingAnimation;
+        Animation.Animation layingAnimation;
         private SpriteEffects flipped = new SpriteEffects();
         private bool isGrounded;
         private IInputreader inputreader;
@@ -34,11 +35,14 @@ namespace GameDev_Project_Luca.GameObjects
 
         public Hero(Texture2D texture, IInputreader inputreader)
         {
+            //initialize vars
             heroTexture = texture;
             this.inputreader = inputreader;
             animation = new Animation.Animation();
             idleAnimation = new Animation.Animation();
             walkingAnimation = new Animation.Animation();
+            layingAnimation = new Animation.Animation();
+            //add animationframes
             idleAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(0, 0, 32, 32)));
             idleAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 0, 32, 32)));
             idleAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 0, 32, 32)));
@@ -48,6 +52,13 @@ namespace GameDev_Project_Luca.GameObjects
             walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 32, 32, 32)));
             walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 32, 32, 32)));
             walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(96, 32, 32, 32)));
+
+            layingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 96, 32, 32)));
+            layingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 96, 32, 32)));
+            layingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 96, 32, 32)));
+            layingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 96, 32, 32)));
+
+            //add worth
             position = new Vector2(0, 0);
             speed = new Vector2(1, 1);
             maxSpeed = new Vector2(10, 10);
@@ -56,6 +67,7 @@ namespace GameDev_Project_Luca.GameObjects
 
         public void Update(GameTime gameTime)
         {
+            //set grounded
             if (boundingBox.Bottom == block.Top && boundingBox.X > block.Left && boundingBox.X < block.Right)
             {
                 isGrounded = true;
@@ -70,6 +82,7 @@ namespace GameDev_Project_Luca.GameObjects
         }
         public void Draw(SpriteBatch spriteBatch)
         {
+            //if go left look left
             if (Keyboard.GetState().IsKeyDown(Keys.Left) ||Keyboard.GetState().IsKeyDown(Keys.Q))
             {
                 flipped = SpriteEffects.FlipHorizontally;
@@ -78,11 +91,13 @@ namespace GameDev_Project_Luca.GameObjects
             {
                 flipped = SpriteEffects.None;
             }
+            //draw hero
             spriteBatch.Draw(heroTexture, position, animation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 1, flipped, 0f);
         }
         private void Move()
         {
             Vector2 direction = inputreader.ReadInput();
+            //set right animation
             if (direction != new Vector2(0, 0))
             {
                 animation = walkingAnimation;
@@ -91,13 +106,15 @@ namespace GameDev_Project_Luca.GameObjects
             {
                 animation = idleAnimation;
             }
-
+            if (Keyboard.GetState().IsKeyDown(Keys.Down) && isGrounded)
+                animation = layingAnimation;
+            //basic gravity (i am disappointed)
             if (!isGrounded)
             { 
                 direction.Y = 1;
                 //direction.Y *= accelleration.Y;
             }
-
+            //sprinting
             if (Keyboard.GetState().IsKeyDown(Keys.LeftShift))
                 direction.X *= 2;
             //if (direction.Length() <= maxSpeed.Length())
