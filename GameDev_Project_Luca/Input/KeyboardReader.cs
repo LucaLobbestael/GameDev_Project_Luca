@@ -17,13 +17,13 @@ namespace GameDev_Project_Luca.Input
         {
             KeyboardState state = Keyboard.GetState();
             Vector2 direction = Vector2.Zero;
-            if (state.IsKeyDown(Keys.Left))
+            if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.Q))
                 direction.X -= 1;
-            if (state.IsKeyDown(Keys.Right))
+            if (state.IsKeyDown(Keys.Right)||state.IsKeyDown(Keys.D))
                 direction.X += 1;
-            if (state.IsKeyDown(Keys.Up))
+            if (state.IsKeyDown(Keys.Up)||state.IsKeyDown(Keys.Z))
                 direction.Y -= 1;
-            if (state.IsKeyDown(Keys.Down))
+            if (state.IsKeyDown(Keys.Down)||state.IsKeyDown(Keys.S))
                 direction.Y += 1;
             return direction;
         }

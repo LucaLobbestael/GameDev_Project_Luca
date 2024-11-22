@@ -18,7 +18,7 @@ namespace GameDev_Project_Luca.GameObjects
         Animation.Animation idleAnimation;
         Animation.Animation walkingAnimation;
         private SpriteEffects flipped = new SpriteEffects();
-        private bool isFalling;
+        private bool isGrounded;
         private IInputreader inputreader;
         private Vector2 position;
         private Vector2 speed;
@@ -58,11 +58,11 @@ namespace GameDev_Project_Luca.GameObjects
         {
             if (boundingBox.Bottom == block.Top && boundingBox.X > block.Left && boundingBox.X < block.Right)
             {
-                isFalling = false;
+                isGrounded = true;
             }
             else
             {
-                isFalling = true;
+                isGrounded = false;
                 accelleration += new Vector2(1,1);
             }
             Move();
@@ -70,7 +70,7 @@ namespace GameDev_Project_Luca.GameObjects
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+            if (Keyboard.GetState().IsKeyDown(Keys.Left) ||Keyboard.GetState().IsKeyDown(Keys.Q))
             {
                 flipped = SpriteEffects.FlipHorizontally;
             }
@@ -92,11 +92,14 @@ namespace GameDev_Project_Luca.GameObjects
                 animation = idleAnimation;
             }
 
-            if (isFalling)
+            if (!isGrounded)
             { 
                 direction.Y = 1;
                 //direction.Y *= accelleration.Y;
             }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.LeftShift))
+                direction.X *= 2;
             //if (direction.Length() <= maxSpeed.Length())
             direction *= speed;
             boundingBox.X = (int)position.X+3;
