@@ -2,22 +2,16 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mime;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameDev_Project_Luca.GameObjects
 {
-    internal class Hero:IGameObject, IMovable
+    internal class Hero : IGameObject, IMovable
     {
-        Texture2D heroTexture;
-        Animation.Animation animation;
-        Animation.Animation idleAnimation;
-        Animation.Animation walkingAnimation;
-        Animation.Animation layingAnimation;
+        private Texture2D heroTexture;
+        private Animation.Animation animation;
+        private Animation.Animation idleAnimation;
+        private Animation.Animation walkingAnimation;
+        private Animation.Animation layingAnimation;
         private SpriteEffects flipped = new SpriteEffects();
         private bool isGrounded;
         private IInputreader inputreader;
@@ -27,8 +21,9 @@ namespace GameDev_Project_Luca.GameObjects
         private Vector2 accelleration;
         private Vector2 maxAccelleration;
         private Rectangle boundingBox;
+        //TODO: add map to remove block
         public Rectangle block;
-        
+
 
         Vector2 IMovable.position { get => this.position; set => this.position = position; }
         Vector2 IMovable.speed { get => this.speed; set => this.speed = speed; }
@@ -36,9 +31,7 @@ namespace GameDev_Project_Luca.GameObjects
 
         public Hero(Texture2D texture, IInputreader inputreader)
         {
-            //initialize vars
-            heroTexture = texture;
-            this.inputreader = inputreader;
+            //initialize properties
             animation = new Animation.Animation();
             idleAnimation = new Animation.Animation();
             walkingAnimation = new Animation.Animation();
@@ -49,7 +42,7 @@ namespace GameDev_Project_Luca.GameObjects
             idleAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 0, 32, 32)));
             idleAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(96, 0, 32, 32)));
 
-            walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(0,32,32,32)));
+            walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(0, 32, 32, 32)));
             walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 32, 32, 32)));
             walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 32, 32, 32)));
             walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(96, 32, 32, 32)));
@@ -63,27 +56,29 @@ namespace GameDev_Project_Luca.GameObjects
             layingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 96, 32, 32)));
             layingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 96, 32, 32)));
 
-            //add worth
+            //add data to vars
+            heroTexture = texture;
+            this.inputreader = inputreader;
             position = new Vector2(0, 0);
             speed = new Vector2(1, 1);
-            maxAccelleration = new Vector2(25,25);
+            maxAccelleration = new Vector2(25, 25);
             maxSpeed = new Vector2(10, 10);
             boundingBox = new Rectangle(6, 22, 17, 10);
         }
-
         public void Update(GameTime gameTime)
         {
             //set grounded
+            //TODO: get rid of block & add map
             if (boundingBox.Bottom == block.Top && boundingBox.X > block.Left && boundingBox.X < block.Right)
             {
                 isGrounded = true;
-                accelleration = new Vector2(0, 0);
+                accelleration = Vector2.Zero;
             }
             else
             {
                 isGrounded = false;
                 if (accelleration.X < maxAccelleration.X && accelleration.Y < maxAccelleration.Y)
-                    accelleration += new Vector2(1,1);
+                    accelleration += new Vector2(1, 1);
             }
             Move();
             animation.Update(gameTime);
@@ -91,7 +86,7 @@ namespace GameDev_Project_Luca.GameObjects
         public void Draw(SpriteBatch spriteBatch)
         {
             //if go left look left
-            if (Keyboard.GetState().IsKeyDown(Keys.Left) ||Keyboard.GetState().IsKeyDown(Keys.Q))
+            if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Q))
             {
                 flipped = SpriteEffects.FlipHorizontally;
             }
@@ -118,7 +113,7 @@ namespace GameDev_Project_Luca.GameObjects
                 animation = layingAnimation;
             //basic gravity
             if (!isGrounded)
-            { 
+            {
                 direction.Y = 1;
                 if (direction.Length() < maxSpeed.Length())
                 {
@@ -137,10 +132,11 @@ namespace GameDev_Project_Luca.GameObjects
             if (Keyboard.GetState().IsKeyDown(Keys.LeftShift))
                 direction.X *= 2;
             direction *= speed;
-            boundingBox.X = (int)position.X+3;
-            boundingBox.Y = (int)position.Y+22;
+            boundingBox.X = (int)position.X + 3;
+            boundingBox.Y = (int)position.Y + 22;
             boundingBox.X += (int)direction.X;
             boundingBox.Y += (int)direction.Y;
+            //TODO: get rid of block & add map
             if (boundingBox.Intersects(block))
             {
                 boundingBox.X -= (int)direction.X;
@@ -150,8 +146,8 @@ namespace GameDev_Project_Luca.GameObjects
             {
                 position += direction;
             }
-            
-            
+
+
         }
     }
 }
