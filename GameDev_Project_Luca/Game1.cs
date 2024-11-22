@@ -15,7 +15,7 @@ namespace GameDev_Project_Luca
         private Texture2D _texture;
         Hero hero;
         Texture2D blockTexture;
-        Rectangle block = new Rectangle(0, 60, 100, 5);
+        Rectangle block = new Rectangle(0, 60, 100, 20);
         SpriteEffects flipped = new SpriteEffects();
 
         public Game1()
@@ -67,7 +67,7 @@ namespace GameDev_Project_Luca
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             hero.Draw(_spriteBatch);
             
             _spriteBatch.Draw(blockTexture, block,Color.Red);

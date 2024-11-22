@@ -25,6 +25,7 @@ namespace GameDev_Project_Luca.GameObjects
         private Vector2 speed;
         private Vector2 maxSpeed;
         private Vector2 accelleration;
+        private Vector2 maxAccelleration;
         private Rectangle boundingBox;
         public Rectangle block;
         
@@ -55,12 +56,17 @@ namespace GameDev_Project_Luca.GameObjects
 
             layingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 96, 32, 32)));
             layingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 96, 32, 32)));
+            layingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 96, 32, 32)));
+            layingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 96, 32, 32)));
+            layingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 96, 32, 32)));
+            layingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 96, 32, 32)));
             layingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 96, 32, 32)));
             layingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 96, 32, 32)));
 
             //add worth
             position = new Vector2(0, 0);
             speed = new Vector2(1, 1);
+            maxAccelleration = new Vector2(25,25);
             maxSpeed = new Vector2(10, 10);
             boundingBox = new Rectangle(6, 22, 17, 10);
         }
@@ -71,11 +77,13 @@ namespace GameDev_Project_Luca.GameObjects
             if (boundingBox.Bottom == block.Top && boundingBox.X > block.Left && boundingBox.X < block.Right)
             {
                 isGrounded = true;
+                accelleration = new Vector2(0, 0);
             }
             else
             {
                 isGrounded = false;
-                accelleration += new Vector2(1,1);
+                if (accelleration.X < maxAccelleration.X && accelleration.Y < maxAccelleration.Y)
+                    accelleration += new Vector2(1,1);
             }
             Move();
             animation.Update(gameTime);
@@ -87,7 +95,7 @@ namespace GameDev_Project_Luca.GameObjects
             {
                 flipped = SpriteEffects.FlipHorizontally;
             }
-            else
+            else if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
             {
                 flipped = SpriteEffects.None;
             }
@@ -108,16 +116,26 @@ namespace GameDev_Project_Luca.GameObjects
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Down) && isGrounded)
                 animation = layingAnimation;
-            //basic gravity (i am disappointed)
+            //basic gravity
             if (!isGrounded)
             { 
                 direction.Y = 1;
-                //direction.Y *= accelleration.Y;
+                if (direction.Length() < maxSpeed.Length())
+                {
+                    direction.Y += 1 * (accelleration.Y * (float)0.1);
+                    boundingBox.X += (int)direction.X;
+                    boundingBox.Y += (int)direction.Y;
+                    if (boundingBox.Intersects(block))
+                    {
+                        boundingBox.X -= (int)direction.X;
+                        boundingBox.Y -= (int)direction.Y;
+                        direction.Y = 1;
+                    }
+                }
             }
             //sprinting
             if (Keyboard.GetState().IsKeyDown(Keys.LeftShift))
                 direction.X *= 2;
-            //if (direction.Length() <= maxSpeed.Length())
             direction *= speed;
             boundingBox.X = (int)position.X+3;
             boundingBox.Y = (int)position.Y+22;
