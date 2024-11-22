@@ -16,6 +16,7 @@ namespace GameDev_Project_Luca
         Hero hero;
         Texture2D blockTexture;
         Rectangle block = new Rectangle(0, 60, 100, 5);
+        SpriteEffects flipped = new SpriteEffects();
 
         public Game1()
         {
@@ -56,7 +57,6 @@ namespace GameDev_Project_Luca
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            
             // TODO: Add your update logic here
             hero.Update(gameTime);
             base.Update(gameTime);
@@ -69,6 +69,7 @@ namespace GameDev_Project_Luca
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
             hero.Draw(_spriteBatch);
+            
             _spriteBatch.Draw(blockTexture, block,Color.Red);
             _spriteBatch.End();
 

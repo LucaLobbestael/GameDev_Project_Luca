@@ -15,7 +15,10 @@ namespace GameDev_Project_Luca.GameObjects
     {
         Texture2D heroTexture;
         Animation.Animation animation;
-        bool isFalling;
+        Animation.Animation idleAnimation;
+        Animation.Animation walkingAnimation;
+        private SpriteEffects flipped = new SpriteEffects();
+        private bool isFalling;
         private IInputreader inputreader;
         private Vector2 position;
         private Vector2 speed;
@@ -34,10 +37,17 @@ namespace GameDev_Project_Luca.GameObjects
             heroTexture = texture;
             this.inputreader = inputreader;
             animation = new Animation.Animation();
-            animation.AddFrame(new Animation.AnimationFrame(new Rectangle(0,0,32,32)));
-            animation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 0, 32, 32)));
-            animation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 0, 32, 32)));
-            animation.AddFrame(new Animation.AnimationFrame(new Rectangle(96, 0, 32, 32)));
+            idleAnimation = new Animation.Animation();
+            walkingAnimation = new Animation.Animation();
+            idleAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(0, 0, 32, 32)));
+            idleAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 0, 32, 32)));
+            idleAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 0, 32, 32)));
+            idleAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(96, 0, 32, 32)));
+
+            walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(0,32,32,32)));
+            walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 32, 32, 32)));
+            walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 32, 32, 32)));
+            walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(96, 32, 32, 32)));
             position = new Vector2(0, 0);
             speed = new Vector2(1, 1);
             maxSpeed = new Vector2(10, 10);
@@ -60,15 +70,32 @@ namespace GameDev_Project_Luca.GameObjects
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(heroTexture, position, animation.CurrentFrame.SourceRectangle, Color.White);
+            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+            {
+                flipped = SpriteEffects.FlipHorizontally;
+            }
+            else
+            {
+                flipped = SpriteEffects.None;
+            }
+            spriteBatch.Draw(heroTexture, position, animation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 1, flipped, 0f);
         }
         private void Move()
         {
             Vector2 direction = inputreader.ReadInput();
-            if (isFalling)
+            if (direction != new Vector2(0, 0))
             {
+                animation = walkingAnimation;
+            }
+            else
+            {
+                animation = idleAnimation;
+            }
+
+            if (isFalling)
+            { 
                 direction.Y = 1;
-                direction.Y *= accelleration.Y;
+                //direction.Y *= accelleration.Y;
             }
             //if (direction.Length() <= maxSpeed.Length())
             direction *= speed;
