@@ -14,12 +14,16 @@ namespace GameDev_Project_Luca.GameObjects
         private Animation.Animation layingAnimation;
         private SpriteEffects flipped = new SpriteEffects();
         private bool isGrounded;
+        private bool isFalling;
+        private bool reachedMaxJumpHeight;
         private IInputreader inputreader;
         private Vector2 position;
+        private Vector2 lastGroundedPosition;
         private Vector2 speed;
         private Vector2 maxSpeed;
         private Vector2 accelleration;
         private Vector2 maxAccelleration;
+        private Vector2 maxJumpHeight;
         private Rectangle boundingBox;
         //TODO: add map to remove block
         public Rectangle block;
@@ -64,28 +68,38 @@ namespace GameDev_Project_Luca.GameObjects
             maxAccelleration = new Vector2(25, 25);
             maxSpeed = new Vector2(10, 10);
             boundingBox = new Rectangle(6, 22, 17, 10);
+            isFalling = true;
+            reachedMaxJumpHeight = false;
         }
         public void Update(GameTime gameTime)
         {
             //set grounded
             //TODO: get rid of block & add map
-            if (boundingBox.Bottom == block.Top && boundingBox.X > block.Left && boundingBox.X < block.Right)
+            if (boundingBox.Bottom == block.Top && boundingBox.Right > block.Left && boundingBox.Left < block.Right)
             {
                 isGrounded = true;
+                isFalling = false;
                 accelleration = Vector2.Zero;
+                reachedMaxJumpHeight = false;
             }
             else
             {
                 isGrounded = false;
-                if (accelleration.X < maxAccelleration.X && accelleration.Y < maxAccelleration.Y)
-                    accelleration += new Vector2(1, 1);
+                if (accelleration.Y < maxAccelleration.Y)
+                    accelleration += new Vector2(0, 1);
+            }
+            //set last grounded position + max jump height
+            if (isGrounded)
+            {
+                this.lastGroundedPosition = position;
+                this.maxJumpHeight.Y = (this.lastGroundedPosition.Y -= 40);
             }
             Move();
             animation.Update(gameTime);
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            //if go left look left
+            //if go left look left and vice-versa
             if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Q))
             {
                 flipped = SpriteEffects.FlipHorizontally;
@@ -112,7 +126,7 @@ namespace GameDev_Project_Luca.GameObjects
             if (Keyboard.GetState().IsKeyDown(Keys.Down) && isGrounded)
                 animation = layingAnimation;
             //basic gravity
-            if (!isGrounded)
+            if (isFalling)
             {
                 direction.Y = 1;
                 if (direction.Length() < maxSpeed.Length())
@@ -124,10 +138,29 @@ namespace GameDev_Project_Luca.GameObjects
                     {
                         boundingBox.X -= (int)direction.X;
                         boundingBox.Y -= (int)direction.Y;
-                        direction.Y = 1;
+                        direction.Y = (float)0.1;
                     }
                 }
             }
+            //basic jumping
+            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            {
+                if (position.Y >= maxJumpHeight.Y && reachedMaxJumpHeight == false)
+                {
+                    direction.Y = -4;
+                }
+                else
+                {
+                    isFalling = true;
+                    reachedMaxJumpHeight = true;
+                }
+            }
+            else
+            {
+                isFalling = true;
+                reachedMaxJumpHeight = true;
+            }
+
             //sprinting
             if (Keyboard.GetState().IsKeyDown(Keys.LeftShift))
                 direction.X *= 2;

@@ -15,8 +15,7 @@ namespace GameDev_Project_Luca
         private Texture2D _texture;
         Hero hero;
         Texture2D blockTexture;
-        Rectangle block = new Rectangle(0, 60, 100, 20);
-        SpriteEffects flipped = new SpriteEffects();
+        Rectangle block = new Rectangle(0, 100, 100, 20);
 
         public Game1()
         {
