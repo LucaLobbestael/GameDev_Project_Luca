@@ -1,9 +1,11 @@
 ﻿using GameDev_Project_Luca.GameObjects;
 using GameDev_Project_Luca.Input;
+using GameDev_Project_Luca.Levels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace GameDev_Project_Luca
@@ -15,16 +17,13 @@ namespace GameDev_Project_Luca
         private Texture2D _texture;
         Hero hero;
         Texture2D blockTexture;
-        Rectangle block = new Rectangle(0, 100, 100, 20);
+        Level1 level1;
 
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            //_graphics.PreferredBackBufferWidth = 1920;
-            //_graphics.PreferredBackBufferHeight = 1080;
-            //_graphics.IsFullScreen = true;
             IsFixedTimeStep = true; //fps lock
             TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
         }
@@ -40,6 +39,7 @@ namespace GameDev_Project_Luca
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             blockTexture = new Texture2D(GraphicsDevice, 1, 1);
             blockTexture.SetData(new[] { Color.White });
+            
 
             // TODO: use this.Content to load your game content here
             _texture = Content.Load<Texture2D>("Hedgehog Sprite Sheet");
@@ -49,7 +49,16 @@ namespace GameDev_Project_Luca
         private void InitializeGameObjects()
         {
             hero = new Hero(_texture, new KeyboardReader());
-            hero.block = block;
+            level1 = new Level1();
+            level1.CreateBlocks();
+            foreach (var block in level1.blocks)
+            {
+                if (block != null)
+                {
+                    block.setTexture(this.blockTexture);
+                }
+            }
+            hero.blocks = level1.blocks;
         }
 
         protected override void Update(GameTime gameTime)
@@ -67,9 +76,13 @@ namespace GameDev_Project_Luca
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            foreach (var block in level1.blocks)
+            {
+                if (block == null){}
+                else
+                block.Draw(_spriteBatch);
+            }
             hero.Draw(_spriteBatch);
-            
-            _spriteBatch.Draw(blockTexture, block,Color.Red);
             _spriteBatch.End();
 
             base.Draw(gameTime);

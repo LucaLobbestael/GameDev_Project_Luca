@@ -1,7 +1,9 @@
-﻿using GameDev_Project_Luca.Interfaces;
+﻿using GameDev_Project_Luca.GameComponents;
+using GameDev_Project_Luca.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace GameDev_Project_Luca.GameObjects
 {
@@ -26,7 +28,7 @@ namespace GameDev_Project_Luca.GameObjects
         private Vector2 maxJumpHeight;
         private Rectangle boundingBox;
         //TODO: add map to remove block
-        public Rectangle block;
+        public List<Block> blocks;
 
 
         Vector2 IMovable.position { get => this.position; set => this.position = position; }
@@ -75,7 +77,26 @@ namespace GameDev_Project_Luca.GameObjects
         {
             //set grounded
             //TODO: get rid of block & add map
-            if (boundingBox.Bottom == block.Top && boundingBox.Right > block.Left && boundingBox.Left < block.Right)
+            foreach (var block in blocks)
+            {
+                if (block != null)
+                {
+                    if (boundingBox.Bottom == block.BoundingBox.Top && boundingBox.Right > block.BoundingBox.Left && boundingBox.Left < block.BoundingBox.Right)
+                    {
+                        isGrounded = true;
+                        isFalling = false;
+                        accelleration = Vector2.Zero;
+                        reachedMaxJumpHeight = false;
+                    }
+                    else
+                    {
+                        isGrounded = false;
+                        if (accelleration.Y < maxAccelleration.Y)
+                            accelleration += new Vector2(0, 1);
+                    }
+                }
+            }
+            /*if (boundingBox.Bottom == block.Top && boundingBox.Right > block.Left && boundingBox.Left < block.Right)
             {
                 isGrounded = true;
                 isFalling = false;
@@ -87,7 +108,7 @@ namespace GameDev_Project_Luca.GameObjects
                 isGrounded = false;
                 if (accelleration.Y < maxAccelleration.Y)
                     accelleration += new Vector2(0, 1);
-            }
+            }*/
             //set last grounded position + max jump height
             if (isGrounded)
             {
@@ -131,23 +152,35 @@ namespace GameDev_Project_Luca.GameObjects
                 direction.Y = 1;
                 if (direction.Length() < maxSpeed.Length())
                 {
-                    direction.Y += 1 * (accelleration.Y * (float)0.1);
+                    direction.Y += 2 * (accelleration.Y * (float)0.1);
                     boundingBox.X += (int)direction.X;
                     boundingBox.Y += (int)direction.Y;
-                    if (boundingBox.Intersects(block))
+                    foreach (var block in blocks)
+                    {
+                        if (block != null)
+                        {
+                            if (boundingBox.Intersects(block.BoundingBox))
+                            {
+                                boundingBox.X -= (int)direction.X;
+                                boundingBox.Y -= (int)direction.Y;
+                                direction.Y = (float)0.1;
+                            }
+                        }
+                    }
+                    /*if (boundingBox.Intersects(block))
                     {
                         boundingBox.X -= (int)direction.X;
                         boundingBox.Y -= (int)direction.Y;
                         direction.Y = (float)0.1;
-                    }
+                    }*/
                 }
             }
             //basic jumping
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            if (Keyboard.GetState().IsKeyDown(Keys.Up)||Keyboard.GetState().IsKeyDown(Keys.Space) || Keyboard.GetState().IsKeyDown(Keys.Z))
             {
                 if (position.Y >= maxJumpHeight.Y && reachedMaxJumpHeight == false)
                 {
-                    direction.Y = -4;
+                    direction.Y = -8;
                 }
                 else
                 {
@@ -164,13 +197,30 @@ namespace GameDev_Project_Luca.GameObjects
             //sprinting
             if (Keyboard.GetState().IsKeyDown(Keys.LeftShift))
                 direction.X *= 2;
+
+            //moving left/right
             direction *= speed;
             boundingBox.X = (int)position.X + 3;
             boundingBox.Y = (int)position.Y + 22;
             boundingBox.X += (int)direction.X;
             boundingBox.Y += (int)direction.Y;
             //TODO: get rid of block & add map
-            if (boundingBox.Intersects(block))
+            foreach (var block in blocks)
+            {
+                if (block != null)
+                {
+                if (boundingBox.Intersects(block.BoundingBox))
+                {
+                    boundingBox.X -= (int)direction.X;
+                    boundingBox.Y -= (int)direction.Y;
+                }
+                else
+                {
+                    position += direction;
+                }
+                }
+            }
+            /* (boundingBox.Intersects(block))
             {
                 boundingBox.X -= (int)direction.X;
                 boundingBox.Y -= (int)direction.Y;
@@ -178,7 +228,7 @@ namespace GameDev_Project_Luca.GameObjects
             else
             {
                 position += direction;
-            }
+            }*/
 
 
         }
