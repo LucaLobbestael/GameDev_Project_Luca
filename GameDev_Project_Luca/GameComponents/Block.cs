@@ -17,6 +17,12 @@ namespace GameDev_Project_Luca.GameComponents
         public Color Color { get; set; }
         public Texture2D Texture { get; set; }
 
+        public Block()
+        {
+            Passable = false;
+            Color = Color.Red;
+            BoundingBox = Rectangle.Empty;
+        }
         public Block(int x, int y)
         {
             Passable = false;

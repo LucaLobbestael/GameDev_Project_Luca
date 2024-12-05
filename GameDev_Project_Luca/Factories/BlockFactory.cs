@@ -42,7 +42,7 @@ namespace GameDev_Project_Luca.Factories
             }
             else if (Type == "")
             {
-                newBlock = null;
+                newBlock = new Block();
             }
             return newBlock;
         }
