@@ -5,8 +5,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 
 namespace GameDev_Project_Luca
 {
@@ -39,7 +37,7 @@ namespace GameDev_Project_Luca
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             blockTexture = new Texture2D(GraphicsDevice, 1, 1);
             blockTexture.SetData(new[] { Color.White });
-            
+
 
             // TODO: use this.Content to load your game content here
             _texture = Content.Load<Texture2D>("Hedgehog Sprite Sheet");
@@ -76,12 +74,7 @@ namespace GameDev_Project_Luca
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-            foreach (var block in level1.blocks)
-            {
-                if (block == null){}
-                else
-                block.Draw(_spriteBatch);
-            }
+            level1.Draw(_spriteBatch);
             hero.Draw(_spriteBatch);
             _spriteBatch.End();
 

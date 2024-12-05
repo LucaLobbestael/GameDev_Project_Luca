@@ -4,21 +4,25 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace GameDev_Project_Luca.GameObjects
 {
     internal class Hero : IGameObject, IMovable
     {
+        //textures
         private Texture2D heroTexture;
         private Animation.Animation animation;
         private Animation.Animation idleAnimation;
         private Animation.Animation walkingAnimation;
         private Animation.Animation layingAnimation;
         private SpriteEffects flipped = new SpriteEffects();
+        //checks
         private bool isGrounded;
         private bool isFalling;
         private bool reachedMaxJumpHeight;
         private IInputreader inputreader;
+        //movement
         private Vector2 position;
         private Vector2 lastGroundedPosition;
         private Vector2 speed;
@@ -27,7 +31,7 @@ namespace GameDev_Project_Luca.GameObjects
         private Vector2 maxAccelleration;
         private Vector2 maxJumpHeight;
         private Rectangle boundingBox;
-        //TODO: add map to remove block
+        public Block collidedBlock;
         public List<Block> blocks;
 
 
@@ -67,7 +71,7 @@ namespace GameDev_Project_Luca.GameObjects
             this.inputreader = inputreader;
             position = new Vector2(0, 0);
             speed = new Vector2(1, 1);
-            maxAccelleration = new Vector2(25, 25);
+            maxAccelleration = new Vector2(2, 25);
             maxSpeed = new Vector2(10, 10);
             boundingBox = new Rectangle(6, 22, 17, 10);
             isFalling = true;
@@ -75,40 +79,35 @@ namespace GameDev_Project_Luca.GameObjects
         }
         public void Update(GameTime gameTime)
         {
+            Debug.WriteLine($"{position.X}:{position.Y}");
             //set grounded
-            //TODO: get rid of block & add map
             foreach (var block in blocks)
             {
                 if (block != null)
                 {
-                    if (boundingBox.Bottom == block.BoundingBox.Top && boundingBox.Right > block.BoundingBox.Left && boundingBox.Left < block.BoundingBox.Right)
+                    if (boundingBox.Intersects(block.BoundingBox))
                     {
-                        isGrounded = true;
-                        isFalling = false;
-                        accelleration = Vector2.Zero;
-                        reachedMaxJumpHeight = false;
-                    }
-                    else
-                    {
-                        isGrounded = false;
-                        if (accelleration.Y < maxAccelleration.Y)
-                            accelleration += new Vector2(0, 1);
+                        collidedBlock = block;
                     }
                 }
+                
             }
-            /*if (boundingBox.Bottom == block.Top && boundingBox.Right > block.Left && boundingBox.Left < block.Right)
+            if (collidedBlock != null)
             {
-                isGrounded = true;
-                isFalling = false;
-                accelleration = Vector2.Zero;
-                reachedMaxJumpHeight = false;
+                if (boundingBox.Bottom == collidedBlock.BoundingBox.Top && boundingBox.Right > collidedBlock.BoundingBox.Left && boundingBox.Left < collidedBlock.BoundingBox.Right)
+                {
+                    isGrounded = true;
+                    isFalling = false;
+                    accelleration = Vector2.Zero;
+                    reachedMaxJumpHeight = false;
+                }
+                else
+                {
+                    isGrounded = false;
+                    if (accelleration.Y < maxAccelleration.Y)
+                        accelleration += new Vector2(0, 1);
+                }
             }
-            else
-            {
-                isGrounded = false;
-                if (accelleration.Y < maxAccelleration.Y)
-                    accelleration += new Vector2(0, 1);
-            }*/
             //set last grounded position + max jump height
             if (isGrounded)
             {
@@ -153,30 +152,25 @@ namespace GameDev_Project_Luca.GameObjects
                 if (direction.Length() < maxSpeed.Length())
                 {
                     direction.Y += 2 * (accelleration.Y * (float)0.1);
-                    boundingBox.X += (int)direction.X;
-                    boundingBox.Y += (int)direction.Y;
-                    foreach (var block in blocks)
-                    {
-                        if (block != null)
-                        {
-                            if (boundingBox.Intersects(block.BoundingBox))
-                            {
-                                boundingBox.X -= (int)direction.X;
-                                boundingBox.Y -= (int)direction.Y;
-                                direction.Y = (float)0.1;
-                            }
-                        }
-                    }
-                    /*if (boundingBox.Intersects(block))
-                    {
-                        boundingBox.X -= (int)direction.X;
-                        boundingBox.Y -= (int)direction.Y;
-                        direction.Y = (float)0.1;
-                    }*/
+                    Debug.WriteLine(accelleration);
                 }
             }
+            boundingBox.X += (int)direction.X;
+            boundingBox.Y += (int)direction.Y;
+
+            if (collidedBlock != null)
+            {
+                if (boundingBox.Intersects(collidedBlock.BoundingBox))
+                {
+                    boundingBox.X -= (int)direction.X;
+                    boundingBox.Y -= (int)direction.Y;
+                    direction.Y = (float)0.1;
+                }
+            }
+
+
             //basic jumping
-            if (Keyboard.GetState().IsKeyDown(Keys.Up)||Keyboard.GetState().IsKeyDown(Keys.Space) || Keyboard.GetState().IsKeyDown(Keys.Z))
+            if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.Space) || Keyboard.GetState().IsKeyDown(Keys.Z))
             {
                 if (position.Y >= maxJumpHeight.Y && reachedMaxJumpHeight == false)
                 {
@@ -199,17 +193,16 @@ namespace GameDev_Project_Luca.GameObjects
                 direction.X *= 2;
 
             //moving left/right
-            direction *= speed;
+            direction.X *= speed.X;
             boundingBox.X = (int)position.X + 3;
             boundingBox.Y = (int)position.Y + 22;
             boundingBox.X += (int)direction.X;
             boundingBox.Y += (int)direction.Y;
-            //TODO: get rid of block & add map
-            foreach (var block in blocks)
+
+            if (collidedBlock != null)
             {
-                if (block != null)
-                {
-                if (boundingBox.Intersects(block.BoundingBox))
+
+                if (boundingBox.Intersects(collidedBlock.BoundingBox))
                 {
                     boundingBox.X -= (int)direction.X;
                     boundingBox.Y -= (int)direction.Y;
@@ -218,17 +211,7 @@ namespace GameDev_Project_Luca.GameObjects
                 {
                     position += direction;
                 }
-                }
             }
-            /* (boundingBox.Intersects(block))
-            {
-                boundingBox.X -= (int)direction.X;
-                boundingBox.Y -= (int)direction.Y;
-            }
-            else
-            {
-                position += direction;
-            }*/
 
 
         }

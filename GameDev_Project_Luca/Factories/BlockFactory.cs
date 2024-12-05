@@ -25,6 +25,9 @@ namespace GameDev_Project_Luca.Factories
                 case 2:
                     Type = "GHOST";
                     break;
+                default:
+                    Type = "";
+                    break;
 
             }
             Block newBlock = null;
@@ -36,6 +39,10 @@ namespace GameDev_Project_Luca.Factories
             else if (Type == "GHOST")
             {
                 newBlock = new GhostBlock(x,y);
+            }
+            else if (Type == "")
+            {
+                newBlock = null;
             }
             return newBlock;
         }
