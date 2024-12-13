@@ -80,8 +80,6 @@ namespace GameDev_Project_Luca.GameObjects
         }
         public void Update(GameTime gameTime)
         {
-            Debug.WriteLine($"{position.X}:{position.Y}");
-            Debug.WriteLine($"{isGrounded}");
             //set grounded
             foreach (var block in blocks)
             {
@@ -110,7 +108,7 @@ namespace GameDev_Project_Luca.GameObjects
             if (isGrounded)
             {
                 this.lastGroundedPosition = position;
-                this.maxJumpHeight.Y = (this.lastGroundedPosition.Y -= 40);
+                this.maxJumpHeight.Y = (this.lastGroundedPosition.Y -= 75);
             }
             Move();
             animation.Update(gameTime);
@@ -168,7 +166,7 @@ namespace GameDev_Project_Luca.GameObjects
             {
                 if (position.Y >= maxJumpHeight.Y && reachedMaxJumpHeight == false)
                 {
-                    direction.Y = -8;
+                    direction.Y = -6;
                 }
                 else
                 {
@@ -193,7 +191,21 @@ namespace GameDev_Project_Luca.GameObjects
             boundingBox.X += (int)direction.X;
             boundingBox.Y += (int)direction.Y;
 
+            Rectangle futureBound = boundingBox;
+            futureBound.X += (int)direction.X;
+            futureBound.Y += (int)direction.Y + 1;
+            Rectangle nextBlock = new Rectangle();
 
+            foreach (var block in blocks)
+            {
+                if (block.BoundingBox != Rectangle.Empty)
+                {
+                    if (futureBound.Intersects(block.BoundingBox))
+                    {
+                        nextBlock = block.BoundingBox;
+                    }
+                }
+            }
 
             if (boundingBox.Intersects(collidedBlock.BoundingBox))
             {
@@ -202,10 +214,12 @@ namespace GameDev_Project_Luca.GameObjects
             }
             else
             {
-                position += direction;
+                if (!nextBlock.Intersects(boundingBox))
+                {
+                    position += direction;
+                }
+                
             }
-
-
         }
     }
 }

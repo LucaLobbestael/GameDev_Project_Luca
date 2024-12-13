@@ -10,7 +10,6 @@ namespace GameDev_Project_Luca.Interfaces
 {
     interface IGameComponent
     {
-        void Update(GameTime gameTime);
         void Draw(SpriteBatch spriteBatch);
     }
 }

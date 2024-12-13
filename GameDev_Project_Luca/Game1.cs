@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.ComponentModel;
 
 namespace GameDev_Project_Luca
 {
@@ -14,7 +15,9 @@ namespace GameDev_Project_Luca
         private SpriteBatch _spriteBatch;
         private Texture2D _texture;
         Hero hero;
-        Texture2D blockTexture;
+        Texture2D background;
+        Texture2D grassBlock;
+        Texture2D dirtBlock;
         Level1 level1;
 
         public Game1()
@@ -24,6 +27,9 @@ namespace GameDev_Project_Luca
             IsMouseVisible = true;
             IsFixedTimeStep = true; //fps lock
             TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
+            _graphics.PreferredBackBufferWidth = 1920;
+            _graphics.PreferredBackBufferHeight = 1080;
+            //_graphics.IsFullScreen = true;
         }
 
         protected override void Initialize()
@@ -35,12 +41,13 @@ namespace GameDev_Project_Luca
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            blockTexture = new Texture2D(GraphicsDevice, 1, 1);
-            blockTexture.SetData(new[] { Color.White });
 
 
             // TODO: use this.Content to load your game content here
+            background = Content.Load<Texture2D>("background-lake");
             _texture = Content.Load<Texture2D>("Hedgehog Sprite Sheet");
+            grassBlock = Content.Load<Texture2D>("GrassBlock");
+            dirtBlock = Content.Load<Texture2D>("DirtTexture");
             InitializeGameObjects();
         }
 
@@ -48,14 +55,7 @@ namespace GameDev_Project_Luca
         {
             hero = new Hero(_texture, new KeyboardReader());
             level1 = new Level1();
-            level1.CreateBlocks();
-            foreach (var block in level1.blocks)
-            {
-                if (block != null)
-                {
-                    block.setTexture(this.blockTexture);
-                }
-            }
+            level1.CreateBlocks(grassBlock, dirtBlock);
             hero.blocks = level1.blocks;
         }
 
@@ -74,6 +74,7 @@ namespace GameDev_Project_Luca
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            _spriteBatch.Draw(background, new Rectangle(0, 0, 1920, 1080), Color.White);
             level1.Draw(_spriteBatch);
             hero.Draw(_spriteBatch);
             _spriteBatch.End();

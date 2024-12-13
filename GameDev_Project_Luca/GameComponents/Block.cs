@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GameDev_Project_Luca.GameComponents
 {
-    class Block : IGameObject
+    class Block : Interfaces.IGameComponent
     {
         public Rectangle BoundingBox { get; set; }
         public bool Passable { get; set; }
@@ -23,11 +23,12 @@ namespace GameDev_Project_Luca.GameComponents
             Color = Color.Red;
             BoundingBox = Rectangle.Empty;
         }
-        public Block(int x, int y)
+        public Block(int x, int y, Texture2D tileSet)
         {
             Passable = false;
-            Color = Color.Red;
+            Color = Color.White;
             BoundingBox = new Rectangle(x, y, 50, 50);
+            Texture = tileSet;
         }
         public void setTexture(Texture2D texture)
         {
@@ -35,7 +36,14 @@ namespace GameDev_Project_Luca.GameComponents
         }
         public void Draw(SpriteBatch spriteBatch)
         {
+            if (Texture == null)
+            {
+
+            }
+            else
+            {
             spriteBatch.Draw(Texture, BoundingBox, Color);
+            }
         }
 
     }

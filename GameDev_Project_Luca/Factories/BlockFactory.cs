@@ -11,7 +11,7 @@ namespace GameDev_Project_Luca.Factories
 {
     class BlockFactory
     {
-        public static Block CreateBlock(int x, int y, int type)
+        public static Block CreateBlock(int x, int y, int type, Texture2D grass, Texture2D dirt)
         {
             string Type ="";
             switch(type)
@@ -23,7 +23,7 @@ namespace GameDev_Project_Luca.Factories
                     Type = "NORMAL";
                     break;
                 case 2:
-                    Type = "GHOST";
+                    Type = "DIRT";
                     break;
                 default:
                     Type = "";
@@ -34,11 +34,11 @@ namespace GameDev_Project_Luca.Factories
             Type = Type.ToUpper();
             if (Type == "NORMAL")
             {
-                newBlock = new Block(x, y);
+                newBlock = new Block(x, y, grass);
             }
-            else if (Type == "GHOST")
+            else if (Type == "DIRT")
             {
-                newBlock = new GhostBlock(x,y);
+                newBlock = new Block(x,y, dirt);
             }
             else if (Type == "")
             {
