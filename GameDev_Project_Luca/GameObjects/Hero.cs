@@ -23,7 +23,7 @@ namespace GameDev_Project_Luca.GameObjects
         private bool reachedMaxJumpHeight;
         private IInputreader inputreader;
         //movement
-        private Vector2 position;
+        public Vector2 position;
         private Vector2 lastGroundedPosition;
         private Vector2 speed;
         private Vector2 maxSpeed;

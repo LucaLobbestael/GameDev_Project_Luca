@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace GameDev_Project_Luca
@@ -13,8 +14,12 @@ namespace GameDev_Project_Luca
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Texture2D _texture;
+        private Texture2D _textureHero;
+        private Texture2D _textureFly;
         Hero hero;
+
+        FlyingEnemy fly;
+
         Texture2D background;
         Texture2D grassBlock;
         Texture2D dirtBlock;
@@ -45,7 +50,8 @@ namespace GameDev_Project_Luca
 
             // TODO: use this.Content to load your game content here
             background = Content.Load<Texture2D>("background-lake");
-            _texture = Content.Load<Texture2D>("Hedgehog Sprite Sheet");
+            _textureHero = Content.Load<Texture2D>("Hedgehog Sprite Sheet");
+            _textureFly = Content.Load<Texture2D>("Giant Fly Sprite Sheet");
             grassBlock = Content.Load<Texture2D>("GrassBlock");
             dirtBlock = Content.Load<Texture2D>("DirtTexture");
             InitializeGameObjects();
@@ -53,7 +59,8 @@ namespace GameDev_Project_Luca
 
         private void InitializeGameObjects()
         {
-            hero = new Hero(_texture, new KeyboardReader());
+            hero = new Hero(_textureHero, new KeyboardReader());
+            fly = new FlyingEnemy(_textureFly, hero);
             level1 = new Level1();
             level1.CreateBlocks(grassBlock, dirtBlock);
             hero.blocks = level1.blocks;
@@ -64,6 +71,7 @@ namespace GameDev_Project_Luca
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             // TODO: Add your update logic here
+            fly.Update(gameTime);
             hero.Update(gameTime);
             base.Update(gameTime);
         }
@@ -77,6 +85,7 @@ namespace GameDev_Project_Luca
             _spriteBatch.Draw(background, new Rectangle(0, 0, 1920, 1080), Color.White);
             level1.Draw(_spriteBatch);
             hero.Draw(_spriteBatch);
+            fly.Draw(_spriteBatch);
             _spriteBatch.End();
 
             base.Draw(gameTime);
