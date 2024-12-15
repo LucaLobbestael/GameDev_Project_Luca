@@ -13,7 +13,7 @@ namespace GameDev_Project_Luca.GameObjects
     internal class FlyingEnemy : IGameObject
     {
         //textures & animation
-        private Texture2D flyTexture;
+        private Texture2D texture;
         private Animation.Animation flyingAnimation;
         private Animation.Animation deathAnimation;
         Animation.Animation animation;
@@ -27,7 +27,7 @@ namespace GameDev_Project_Luca.GameObjects
         public FlyingEnemy(Texture2D texture, Hero hero)
         {
             //set texture
-            flyTexture = texture;
+            this.texture = texture;
             //init animations
             flyingAnimation = new Animation.Animation();
             deathAnimation = new Animation.Animation();
@@ -52,7 +52,7 @@ namespace GameDev_Project_Luca.GameObjects
                 flipped = SpriteEffects.FlipHorizontally;
             else
                 flipped = SpriteEffects.None;
-            spriteBatch.Draw(flyTexture, position, animation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 1, flipped, 0f);
+            spriteBatch.Draw(texture, position, animation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 1, flipped, 0f);
         }
 
         public void Update(GameTime gameTime)
