@@ -5,17 +5,9 @@ using System.Collections.Generic;
 
 namespace GameDev_Project_Luca.Levels
 {
-    class Level1
+    class Level2 
     {
         public List<Block> blocks = new List<Block>();
-        // 0 = air
-        // 1 = grassblock
-        // 2 = dirtblock
-        // 3 = player
-        // 4 = flying enemy
-        // 5 = shy enemy
-        // 6 = guarding enemy
-        // 9 = killzone
         int[,] gameboard = new int[,]
         {
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -39,7 +31,7 @@ namespace GameDev_Project_Luca.Levels
         {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0,0},
         {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,0},
         {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,0},
-        {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,9,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1}
+        {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1}
         };
 
         public void CreateBlocks(Texture2D grass, Texture2D dirt)

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection.Metadata.Ecma335;
 
 namespace GameDev_Project_Luca.GameObjects
 {
@@ -16,7 +17,8 @@ namespace GameDev_Project_Luca.GameObjects
         private Animation.Animation idleAnimation;
         private Animation.Animation walkingAnimation;
         private Animation.Animation layingAnimation;
-        private SpriteEffects flipped = new SpriteEffects();
+        public SpriteEffects flipped = new SpriteEffects();
+        private int scale = 2;
         //checks
         private bool isGrounded;
         private bool isFalling;
@@ -30,7 +32,7 @@ namespace GameDev_Project_Luca.GameObjects
         private Vector2 accelleration;
         private Vector2 maxAccelleration;
         private Vector2 maxJumpHeight;
-        private Rectangle boundingBox;
+        public Rectangle boundingBox;
         public Block collidedBlock;
         public List<Block> blocks;
 
@@ -73,7 +75,7 @@ namespace GameDev_Project_Luca.GameObjects
             speed = new Vector2(1, 1);
             maxAccelleration = new Vector2(2, 25);
             maxSpeed = new Vector2(10, 10);
-            boundingBox = new Rectangle(6, 22, 17, 10);
+            boundingBox = new Rectangle(6*scale, 22*scale, 17*scale, 10*scale);
             isFalling = true;
             reachedMaxJumpHeight = false;
             collidedBlock = new Block();
@@ -125,7 +127,7 @@ namespace GameDev_Project_Luca.GameObjects
                 flipped = SpriteEffects.None;
             }
             //draw hero
-            spriteBatch.Draw(heroTexture, position, animation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 1, flipped, 0f);
+            spriteBatch.Draw(heroTexture, position, animation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, scale, flipped, 0f);
         }
         private void Move()
         {
@@ -186,8 +188,8 @@ namespace GameDev_Project_Luca.GameObjects
 
             //moving left/right
             direction.X *= speed.X;
-            boundingBox.X = (int)position.X + 3;
-            boundingBox.Y = (int)position.Y + 22;
+            boundingBox.X = (int)position.X + 7*scale;
+            boundingBox.Y = (int)position.Y + 22*scale;
             boundingBox.X += (int)direction.X;
             boundingBox.Y += (int)direction.Y;
 

@@ -11,38 +11,71 @@ namespace GameDev_Project_Luca.Factories
 {
     class BlockFactory
     {
-        public static Block CreateBlock(int x, int y, int type, Texture2D grass, Texture2D dirt)
+        public static Block CreateBlock(int x, int y, int type1, Texture2D grass, Texture2D dirt)
         {
-            string Type ="";
-            switch(type)
+            string type ="";
+            switch(type1)
             {
                 case 0:
-                    Type = "";
+                    type = "";
                     break;
                 case 1:
-                    Type = "NORMAL";
+                    type = "NORMAL";
                     break;
                 case 2:
-                    Type = "DIRT";
+                    type = "DIRT";
+                    break;
+                case 3:
+                    type = "PLAYER";
+                    break;
+                case 4:
+                    type = "FLYING";
+                    break;
+                case 5:
+                    type = "SHY";
+                    break;
+                case 6:
+                    type = "GUARDING";
+                    break;
+                case 9:
+                    type = "KILL";
                     break;
                 default:
-                    Type = "";
+                    type = "";
                     break;
 
             }
             Block newBlock = null;
-            Type = Type.ToUpper();
-            if (Type == "NORMAL")
+            type = type.ToUpper();
+            switch (type)
             {
-                newBlock = new Block(x, y, grass);
-            }
-            else if (Type == "DIRT")
-            {
-                newBlock = new Block(x,y, dirt);
-            }
-            else if (Type == "")
-            {
-                newBlock = new Block();
+                case "NORMAL":
+                    newBlock = new Block(x, y, grass);
+                    break;
+                case "DIRT":
+                    newBlock = new Block(x, y, dirt);
+                    break;
+                case "PLAYER":
+                    newBlock = new Block();
+                    break;
+                case "FLYING":
+                    newBlock = new Block();
+                    break;
+                case "SHY":
+                    newBlock = new Block();
+                    break;
+                case "GUARDING":
+                    newBlock = new Block();
+                    break;
+                case "KILL":
+                    newBlock = new Block(x,y);
+                    break;
+                case "":
+                    newBlock = new Block();
+                    break;
+                default:
+                    newBlock = new Block();
+                    break;
             }
             return newBlock;
         }

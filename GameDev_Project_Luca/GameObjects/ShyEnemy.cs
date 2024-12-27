@@ -1,16 +1,10 @@
-﻿using GameDev_Project_Luca.Animation;
-using GameDev_Project_Luca.Interfaces;
+﻿using GameDev_Project_Luca.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameDev_Project_Luca.GameObjects
 {
-    internal class FlyingEnemy : IGameObject
+    internal class ShyEnemy : IGameObject
     {
         //textures & animation
         private Texture2D texture;
@@ -24,7 +18,7 @@ namespace GameDev_Project_Luca.GameObjects
         Vector2 position = new Vector2(100, 100);
         Vector2 direction;
 
-        public FlyingEnemy(Texture2D texture, Hero hero)
+        public ShyEnemy(Texture2D texture, Hero hero)
         {
             //set texture
             this.texture = texture;
@@ -57,21 +51,24 @@ namespace GameDev_Project_Luca.GameObjects
 
         public void Update(GameTime gameTime)
         {
-            if(target.boundingBox.X < this.position.X)
+            if (target.position.X < this.position.X && target.flipped == SpriteEffects.FlipHorizontally || target.position.X > this.position.X && target.flipped == SpriteEffects.None)
             {
-                direction.X = -1;
-            }
-            else if(target.boundingBox.X > this.position.X)
-            {
-                direction.X = 1;
-            }
-            if (target.boundingBox.Y < this.position.Y)
-            {
-                direction.Y = -1;
-            }
-            else if(target.boundingBox.Y > this.position.Y)
-            {
-                direction.Y = 1;
+                if (target.boundingBox.X < this.position.X)
+                {
+                    direction.X = -1;
+                }
+                else if (target.boundingBox.X > this.position.X)
+                {
+                    direction.X = 1;
+                }
+                if (target.boundingBox.Y < this.position.Y)
+                {
+                    direction.Y = -1;
+                }
+                else if (target.boundingBox.Y > this.position.Y)
+                {
+                    direction.Y = 1;
+                }
             }
             this.Move();
             animation.Update(gameTime);

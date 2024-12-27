@@ -16,6 +16,7 @@ namespace GameDev_Project_Luca.GameComponents
         public bool Passable { get; set; }
         public Color Color { get; set; }
         public Texture2D Texture { get; set; }
+        bool killBox = false;
 
         public Block()
         {
@@ -30,6 +31,13 @@ namespace GameDev_Project_Luca.GameComponents
             BoundingBox = new Rectangle(x, y, 50, 50);
             Texture = tileSet;
         }
+        public Block(int x, int y)
+        {
+            Passable = false;
+            BoundingBox = new Rectangle(x, y, 50, 50);
+            Color = Color.White;
+            killBox = true;
+        }
         public void setTexture(Texture2D texture)
         {
             Texture = texture;
@@ -43,6 +51,11 @@ namespace GameDev_Project_Luca.GameComponents
             else
             {
             spriteBatch.Draw(Texture, BoundingBox, Color);
+            }
+
+            if (killBox == true)
+            {
+                spriteBatch.Draw(BoundingBox, Color);
             }
         }
 
