@@ -1,4 +1,5 @@
 ﻿using GameDev_Project_Luca.GameComponents;
+using GameDev_Project_Luca.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -68,7 +69,7 @@ namespace GameDev_Project_Luca.Factories
                     newBlock = new Block();
                     break;
                 case "KILL":
-                    newBlock = new Block(x,y);
+                    newBlock = new KillZone(x,y, dirt);
                     break;
                 case "":
                     newBlock = new Block();

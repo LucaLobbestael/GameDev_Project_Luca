@@ -34,7 +34,7 @@ namespace GameDev_Project_Luca
             TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
-            //_graphics.IsFullScreen = true;
+            _graphics.IsFullScreen = true;
         }
 
         protected override void Initialize()

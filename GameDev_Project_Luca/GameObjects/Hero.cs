@@ -83,7 +83,7 @@ namespace GameDev_Project_Luca.GameObjects
         public void Update(GameTime gameTime)
         {
             //set grounded
-            foreach (var block in blocks)
+            foreach (var block in blocks) 
             {
                 if (boundingBox.Intersects(block.BoundingBox))
                 {

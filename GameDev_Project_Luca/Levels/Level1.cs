@@ -1,5 +1,6 @@
 ﻿using GameDev_Project_Luca.Factories;
 using GameDev_Project_Luca.GameComponents;
+using GameDev_Project_Luca.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
