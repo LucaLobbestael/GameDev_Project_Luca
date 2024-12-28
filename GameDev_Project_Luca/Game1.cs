@@ -1,5 +1,6 @@
 ﻿using GameDev_Project_Luca.GameObjects;
 using GameDev_Project_Luca.Input;
+using GameDev_Project_Luca.Interfaces;
 using GameDev_Project_Luca.Levels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,14 +18,17 @@ namespace GameDev_Project_Luca
         private Texture2D _textureHero;
         private Texture2D _textureFly;
         Hero hero;
-
+        Level level;
         FlyingEnemy fly;
 
         Texture2D background;
         Texture2D deathScreen;
         Texture2D grassBlock;
         Texture2D dirtBlock;
+        List<Level> levels = new List<Level>();
         Level1 level1;
+        Level2 level2;
+        Level3 level3;
 
         public Game1()
         {
@@ -35,7 +39,7 @@ namespace GameDev_Project_Luca
             TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
-            _graphics.IsFullScreen = true;
+            //_graphics.IsFullScreen = true;
         }
 
         protected override void Initialize()
@@ -50,10 +54,13 @@ namespace GameDev_Project_Luca
 
 
             // TODO: use this.Content to load your game content here
+            // background + HUD
             background = Content.Load<Texture2D>("background-lake");
             deathScreen = Content.Load<Texture2D>("DeathScreen");
+            // hero + enemies
             _textureHero = Content.Load<Texture2D>("Hedgehog Sprite Sheet");
             _textureFly = Content.Load<Texture2D>("Giant Fly Sprite Sheet");
+            // blocks
             grassBlock = Content.Load<Texture2D>("GrassBlock");
             dirtBlock = Content.Load<Texture2D>("DirtTexture");
             InitializeGameObjects();
@@ -63,9 +70,18 @@ namespace GameDev_Project_Luca
         {
             hero = new Hero(_textureHero, new KeyboardReader());
             fly = new FlyingEnemy(_textureFly, hero);
+            level = new Level();
             level1 = new Level1();
-            level1.CreateBlocks(grassBlock, dirtBlock);
-            hero.blocks = level1.blocks;
+            level2 = new Level2();
+            level3 = new Level3();
+            levels.Add(level1);
+            levels.Add(level2);
+            levels.Add(level3);
+            level.gameboard = level1.gameboard;
+
+            level.hero = hero;
+            level.CreateBlocks(grassBlock, dirtBlock);
+            level.hero.blocks = level.blocks;
         }
 
         protected override void Update(GameTime gameTime)
@@ -74,7 +90,7 @@ namespace GameDev_Project_Luca
                 Exit();
             // TODO: Add your update logic here
             fly.Update(gameTime);
-            hero.Update(gameTime);
+            level.hero.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -85,10 +101,10 @@ namespace GameDev_Project_Luca
             // TODO: Add your drawing code here
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             _spriteBatch.Draw(background, new Rectangle(0, 0, 1920, 1080), Color.White);
-            level1.Draw(_spriteBatch);
-            hero.Draw(_spriteBatch);
+            level.Draw(_spriteBatch);
+            level.hero.Draw(_spriteBatch);
             fly.Draw(_spriteBatch);
-            if (hero.IsDead)
+            if (level.hero.IsDead)
             {
                 _spriteBatch.Draw(deathScreen, new Rectangle(0,0,1920,1080), Color.White);
             }

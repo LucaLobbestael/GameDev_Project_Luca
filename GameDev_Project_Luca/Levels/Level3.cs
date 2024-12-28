@@ -1,11 +1,12 @@
 ﻿using GameDev_Project_Luca.Factories;
 using GameDev_Project_Luca.GameComponents;
+using GameDev_Project_Luca.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
 namespace GameDev_Project_Luca.Levels
 {
-    class Level3
+    class Level3: Level
     {
         public List<Block> blocks = new List<Block>();
         int[,] gameboard = new int[,]
