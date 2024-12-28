@@ -21,6 +21,7 @@ namespace GameDev_Project_Luca
         FlyingEnemy fly;
 
         Texture2D background;
+        Texture2D deathScreen;
         Texture2D grassBlock;
         Texture2D dirtBlock;
         Level1 level1;
@@ -50,6 +51,7 @@ namespace GameDev_Project_Luca
 
             // TODO: use this.Content to load your game content here
             background = Content.Load<Texture2D>("background-lake");
+            deathScreen = Content.Load<Texture2D>("DeathScreen");
             _textureHero = Content.Load<Texture2D>("Hedgehog Sprite Sheet");
             _textureFly = Content.Load<Texture2D>("Giant Fly Sprite Sheet");
             grassBlock = Content.Load<Texture2D>("GrassBlock");
@@ -86,6 +88,10 @@ namespace GameDev_Project_Luca
             level1.Draw(_spriteBatch);
             hero.Draw(_spriteBatch);
             fly.Draw(_spriteBatch);
+            if (hero.IsDead)
+            {
+                _spriteBatch.Draw(deathScreen, new Rectangle(0,0,1920,1080), Color.White);
+            }
             _spriteBatch.End();
 
             base.Draw(gameTime);

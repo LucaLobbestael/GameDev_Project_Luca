@@ -35,6 +35,7 @@ namespace GameDev_Project_Luca.GameObjects
         public Rectangle boundingBox;
         public Block collidedBlock;
         public List<Block> blocks;
+        public bool IsDead = false;
 
 
         Vector2 IMovable.position { get => this.position; set => this.position = position; }
@@ -82,13 +83,19 @@ namespace GameDev_Project_Luca.GameObjects
         }
         public void Update(GameTime gameTime)
         {
-            //set grounded
+            //set grounded && check if collided killzone
             foreach (var block in blocks) 
             {
                 if (boundingBox.Intersects(block.BoundingBox))
                 {
                     collidedBlock = block;
                     position.Y -= 1;
+                }
+                if (block.GetType() == typeof(KillZone)){
+                    if (boundingBox.Intersects(block.BoundingBox))
+                    {
+                        IsDead = true;
+                    }
                 }
 
             }
@@ -117,6 +124,8 @@ namespace GameDev_Project_Luca.GameObjects
         }
         public void Draw(SpriteBatch spriteBatch)
         {
+            if (!IsDead)
+            {
             //if go left look left and vice-versa
             if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Q))
             {
@@ -128,6 +137,11 @@ namespace GameDev_Project_Luca.GameObjects
             }
             //draw hero
             spriteBatch.Draw(heroTexture, position, animation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, scale, flipped, 0f);
+            }
+            else
+            {
+
+            }
         }
         private void Move()
         {
