@@ -10,28 +10,12 @@ namespace GameDev_Project_Luca.GameComponents
 {
     internal class KillZone : Block
     {
-        public Rectangle BoundingBox { get; set; }
-        public bool Passable { get; set; }
-        public Color Color { get; set; }
-        public Texture2D Texture { get; set; }
-
-        public KillZone(int x, int y, Texture2D tileSet)
+        public KillZone(int x, int y, Texture2D texture) : base(x, y, texture)
         {
-            Passable = false;
-            Color = Color.Red;
             BoundingBox = new Rectangle(x, y, 50, 50);
-            Texture = tileSet;
-        }
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            if (Texture == null)
-            {
-
-            }
-            else
-            {
-                spriteBatch.Draw(Texture, BoundingBox, Color);
-            }
+            Passable = false;
+            Color = Color.Transparent;
+            Texture = texture;
         }
     }
 }

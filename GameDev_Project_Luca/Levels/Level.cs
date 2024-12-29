@@ -11,6 +11,7 @@ namespace GameDev_Project_Luca.Levels
     {
         public Hero hero;
         public bool IsFinished = false;
+        public List<Level> levels = new List<Level>();
         public List<Block> blocks = new List<Block>();
         // 0 = air
         // 1 = grassblock
@@ -50,6 +51,11 @@ namespace GameDev_Project_Luca.Levels
                     block.Draw(spriteBatch);
                 }
             }
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            hero.Update(gameTime);
         }
     }
 }

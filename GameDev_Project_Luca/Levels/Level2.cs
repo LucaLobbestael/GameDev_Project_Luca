@@ -8,7 +8,6 @@ namespace GameDev_Project_Luca.Levels
 {
     class Level2 : Level
     {
-        public List<Block> blocks = new List<Block>();
         int[,] gameboard = new int[,]
         {
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -34,28 +33,5 @@ namespace GameDev_Project_Luca.Levels
         {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,0},
         {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1}
         };
-
-        public void CreateBlocks(Texture2D grass, Texture2D dirt)
-        {
-            for (int l = 0; l < gameboard.GetLength(1); l++)
-            {
-                for (int k = 0; k < gameboard.GetLength(0); k++)
-                {
-                    blocks.Add(BlockFactory.CreateBlock(l * 50, k * 50, gameboard[k, l], grass, dirt));
-                }
-            }
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            foreach (var block in blocks)
-            {
-                if (block != null)
-                {
-                    block.Draw(spriteBatch);
-                }
-            }
-        }
-
     }
 }

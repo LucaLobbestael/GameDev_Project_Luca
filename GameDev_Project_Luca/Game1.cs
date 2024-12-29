@@ -25,7 +25,6 @@ namespace GameDev_Project_Luca
         Texture2D deathScreen;
         Texture2D grassBlock;
         Texture2D dirtBlock;
-        List<Level> levels = new List<Level>();
         Level1 level1;
         Level2 level2;
         Level3 level3;
@@ -74,9 +73,11 @@ namespace GameDev_Project_Luca
             level1 = new Level1();
             level2 = new Level2();
             level3 = new Level3();
-            levels.Add(level1);
-            levels.Add(level2);
-            levels.Add(level3);
+
+            level.levels.Add(level1);
+            level.levels.Add(level2);
+            level.levels.Add(level3);
+
             level.gameboard = level1.gameboard;
 
             level.hero = hero;
@@ -89,8 +90,7 @@ namespace GameDev_Project_Luca
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             // TODO: Add your update logic here
-            fly.Update(gameTime);
-            level.hero.Update(gameTime);
+            level.Update(gameTime);
             base.Update(gameTime);
         }
 

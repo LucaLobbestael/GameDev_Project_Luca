@@ -5,34 +5,12 @@ namespace GameDev_Project_Luca.GameComponents
 {
     internal class FinishBlock : Block
     {
-        public Rectangle BoundingBox { get; set; }
-        public bool Passable { get; set; }
-        public Color Color { get; set; }
-        public Texture2D Texture { get; set; }
-
-        public FinishBlock()
+        public FinishBlock(int x, int y, Texture2D texture) : base(x, y, texture)
         {
-            Passable = false;
-            Color = Color.Red;
-            BoundingBox = Rectangle.Empty;
-        }
-        public FinishBlock(int x, int y, Texture2D tileSet)
-        {
+            BoundingBox = new Rectangle(x, y, 50, 50);
             Passable = false;
             Color = Color.Yellow;
-            BoundingBox = new Rectangle(x, y, 50, 50);
-            Texture = tileSet;
-        }
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            if (Texture == null)
-            {
-
-            }
-            else
-            {
-                spriteBatch.Draw(Texture, BoundingBox, Color);
-            }
+            Texture = texture;
         }
     }
 }
