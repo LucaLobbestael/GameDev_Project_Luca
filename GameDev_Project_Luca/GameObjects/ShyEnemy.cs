@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameDev_Project_Luca.GameObjects
 {
-    internal class ShyEnemy : IGameObject
+    internal class ShyEnemy : Enemy, IGameObject
     {
         //textures & animation
         private Texture2D texture;

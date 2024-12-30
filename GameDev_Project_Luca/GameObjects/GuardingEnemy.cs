@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GameDev_Project_Luca.GameObjects
 {
-    internal class GuardingEnemy : IGameObject
+    internal class GuardingEnemy : Enemy, IGameObject
     {
         //textures & animation
         private Texture2D texture;

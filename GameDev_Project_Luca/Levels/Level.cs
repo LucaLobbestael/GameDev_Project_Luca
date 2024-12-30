@@ -12,6 +12,7 @@ namespace GameDev_Project_Luca.Levels
         public Hero hero;
         public bool IsFinished = false;
         public List<Block> blocks = new List<Block>();
+        public List<Enemy> enemies = new List<Enemy>();
         int levelNr = 1;
         // 0 = air
         // 1 = grassblock
@@ -26,22 +27,31 @@ namespace GameDev_Project_Luca.Levels
 
         public void CreateBlocks(Texture2D grass, Texture2D dirt)
         {
-            if (gameboard != null)
-            {
             for (int l = 0; l < gameboard.GetLength(1); l++)
             {
                 for (int k = 0; k < gameboard.GetLength(0); k++)
                 {
-                    if (gameboard[k, l] != 3)
+                    if (gameboard[k, l] != 3 && gameboard[k, l] != 4 && gameboard[k, l] != 5 && gameboard[k, l] != 6)
                     {
                         blocks.Add(BlockFactory.CreateBlock(l * 50, k * 50, gameboard[k, l], grass, dirt));
                     }
-                    else
+                    else if (gameboard[k, l] == 3 )
                     {
                         hero.position = new Vector2(l * 50, k * 50);
                     }
+                    else if (gameboard[k, l] == 4)
+                    {
+                        
+                    }
+                    else if (gameboard[k, l] == 5)
+                    {
+                        
+                    }
+                    else if (gameboard[k, l] == 6)
+                    {
+                        
+                    }
                 }
-            }
             }
         }
 
@@ -59,6 +69,10 @@ namespace GameDev_Project_Luca.Levels
         public void Update(GameTime gameTime)
         {
             hero.Update(gameTime);
+            /*foreach (var enemy in enemies)
+            {
+                enemy.Update(gameTime)
+            }*/
         }
 
         public bool CheckLevelStatus()
@@ -71,6 +85,8 @@ namespace GameDev_Project_Luca.Levels
             levelNr++;
             IsFinished = false;
             blocks.Clear();
+            enemies.Clear();
+
             switch (levelNr)
             {
                 case 1:

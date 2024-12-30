@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace GameDev_Project_Luca.Levels
 {
-    class Level3
+    class Level3:Level
     {
         // 0 = air
         // 1 = grassblock

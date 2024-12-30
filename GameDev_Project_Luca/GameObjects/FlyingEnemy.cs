@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GameDev_Project_Luca.GameObjects
 {
-    internal class FlyingEnemy : IGameObject
+    internal class FlyingEnemy : Enemy, IGameObject
     {
         //textures & animation
         private Texture2D texture;

@@ -1,13 +1,12 @@
-﻿using GameDev_Project_Luca.GameObjects;
+﻿using GameDev_Project_Luca.GameComponents;
+using GameDev_Project_Luca.GameObjects;
 using GameDev_Project_Luca.Input;
-using GameDev_Project_Luca.Interfaces;
 using GameDev_Project_Luca.Levels;
+using GameDev_Project_Luca.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace GameDev_Project_Luca
 {
@@ -17,14 +16,20 @@ namespace GameDev_Project_Luca
         private SpriteBatch _spriteBatch;
         private Texture2D _textureHero;
         private Texture2D _textureFly;
+        private Texture2D _textureGuard;
+
+        private Gamestate gameState = new Gamestate();
+        private Menu menu = new Menu();
+
         Hero hero;
         Level level;
-        FlyingEnemy fly;
 
         Texture2D background;
         Texture2D deathScreen;
+
         Texture2D grassBlock;
         Texture2D dirtBlock;
+
         Level1 level1;
         Level2 level2;
         Level3 level3;
@@ -56,9 +61,15 @@ namespace GameDev_Project_Luca
             // background + HUD
             background = Content.Load<Texture2D>("background-lake");
             deathScreen = Content.Load<Texture2D>("DeathScreen");
+            //Titlescreen
+            menu.titleScreen = Content.Load<Texture2D>("TitleScreen");
+            menu.startSelected = Content.Load<Texture2D>("StartSelected");
+            menu.ExitSelected = Content.Load<Texture2D>("ExitSelected");
             // hero + enemies
             _textureHero = Content.Load<Texture2D>("Hedgehog Sprite Sheet");
             _textureFly = Content.Load<Texture2D>("Giant Fly Sprite Sheet");
+            _textureGuard = Content.Load<Texture2D>("Fox Sprite Sheet");
+
             // blocks
             grassBlock = Content.Load<Texture2D>("GrassBlock");
             dirtBlock = Content.Load<Texture2D>("DirtTexture");
@@ -68,7 +79,6 @@ namespace GameDev_Project_Luca
         private void InitializeGameObjects()
         {
             hero = new Hero(_textureHero, new KeyboardReader());
-            fly = new FlyingEnemy(_textureFly, hero);
             level = new Level();
             level1 = new Level1();
             level2 = new Level2();
@@ -87,27 +97,49 @@ namespace GameDev_Project_Luca
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             // TODO: Add your update logic here
-            bool finished = level.CheckLevelStatus();
-            if (finished)
+            if (gameState.CheckState() == 0)
             {
-                int levelNr = level.SwitchLevel();
-                switch (levelNr)
+                bool enter = menu.Update();
+                if (enter == true)
                 {
-                    case 1:
-                        level.gameboard = level1.gameboard;
-                        break;
-                    case 2:
-                        level.gameboard = level2.gameboard;
-                        break;
-                    case 3:
-                        level.gameboard = level3.gameboard;
-                        break;
-                    default:
-                        break;
+                    int state = menu.PressedEnter();
+                    //1 = start, 9 = stop
+                    if (state == 1)
+                        gameState.changeState(1);
+                    else if (state == 9)
+                    {
+                        Exit();
+                    }
                 }
-                level.CreateBlocks(grassBlock, dirtBlock);
             }
-            level.Update(gameTime);
+
+            if (gameState.CheckState() == 1)
+            {
+                bool finished = level.CheckLevelStatus();
+                if (finished)
+                {
+                    int levelNr = level.SwitchLevel();
+                    switch (levelNr)
+                    {
+                        case 1:
+                            level.gameboard = level1.gameboard;
+                            break;
+                        case 2:
+                            level.gameboard = level2.gameboard;
+                            break;
+                        case 3:
+                            level.gameboard = level3.gameboard;
+                            break;
+                        case 4:
+                            gameState.changeState(3);
+                            break;
+                    }
+                    level.CreateBlocks(grassBlock, dirtBlock);
+                }
+                level.Update(gameTime);
+            }
+            if (gameState.CheckState() == 3)
+
             base.Update(gameTime);
         }
 
@@ -118,13 +150,19 @@ namespace GameDev_Project_Luca
             // TODO: Add your drawing code here
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             _spriteBatch.Draw(background, new Rectangle(0, 0, 1920, 1080), Color.White);
+            if (gameState.CheckState() == 0)
+                menu.Draw(_spriteBatch);
+            if (gameState.CheckState() == 1)
+            {
             level.Draw(_spriteBatch);
             level.hero.Draw(_spriteBatch);
-            fly.Draw(_spriteBatch);
             if (level.hero.IsDead)
             {
-                _spriteBatch.Draw(deathScreen, new Rectangle(0,0,1920,1080), Color.White);
+                _spriteBatch.Draw(deathScreen, new Rectangle(0, 0, 1920, 1080), Color.White);
             }
+                
+            }
+            //if (gameState.CheckState() == 3)
             _spriteBatch.End();
 
             base.Draw(gameTime);
