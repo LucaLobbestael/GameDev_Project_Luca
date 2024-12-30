@@ -74,10 +74,6 @@ namespace GameDev_Project_Luca
             level2 = new Level2();
             level3 = new Level3();
 
-            level.level1 = level1;
-            level.level2 = level2;
-            level.level3 = level3;
-
             level.gameboard = level1.gameboard;
 
             level.hero = hero;
@@ -91,7 +87,26 @@ namespace GameDev_Project_Luca
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             // TODO: Add your update logic here
-            level.CheckLevelStatus();
+            bool finished = level.CheckLevelStatus();
+            if (finished)
+            {
+                int levelNr = level.SwitchLevel();
+                switch (levelNr)
+                {
+                    case 1:
+                        level.gameboard = level1.gameboard;
+                        break;
+                    case 2:
+                        level.gameboard = level2.gameboard;
+                        break;
+                    case 3:
+                        level.gameboard = level3.gameboard;
+                        break;
+                    default:
+                        break;
+                }
+                level.CreateBlocks(grassBlock, dirtBlock);
+            }
             level.Update(gameTime);
             base.Update(gameTime);
         }

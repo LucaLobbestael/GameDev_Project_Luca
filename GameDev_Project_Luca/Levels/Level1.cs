@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace GameDev_Project_Luca.Levels
 {
-    class Level1 : Level
+    class Level1 
     {
         // 0 = air
         // 1 = grassblock
@@ -17,6 +17,7 @@ namespace GameDev_Project_Luca.Levels
         // 4 = flying enemy
         // 5 = shy enemy
         // 6 = guarding enemy
+        // 8 = finish
         // 9 = killzone
         public int[,] gameboard = new int[,]
         {
