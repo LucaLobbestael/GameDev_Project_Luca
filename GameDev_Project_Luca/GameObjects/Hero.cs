@@ -1,5 +1,6 @@
 ﻿using GameDev_Project_Luca.GameComponents;
 using GameDev_Project_Luca.Interfaces;
+using GameDev_Project_Luca.Levels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -36,6 +37,8 @@ namespace GameDev_Project_Luca.GameObjects
         public Block collidedBlock;
         public List<Block> blocks;
         public bool IsDead = false;
+        // Level
+        public Level level;
 
 
         Vector2 IMovable.position { get => this.position; set => this.position = position; }
@@ -118,6 +121,11 @@ namespace GameDev_Project_Luca.GameObjects
             {
                 this.lastGroundedPosition = position;
                 this.maxJumpHeight.Y = (this.lastGroundedPosition.Y -= 75);
+            }
+            // check if level is finished
+            if (collidedBlock.GetType() == typeof(FinishBlock))
+            {
+                level.IsFinished = true;
             }
             Move();
             animation.Update(gameTime);

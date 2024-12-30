@@ -3,6 +3,7 @@ using GameDev_Project_Luca.GameComponents;
 using GameDev_Project_Luca.GameObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace GameDev_Project_Luca.Levels
@@ -11,8 +12,13 @@ namespace GameDev_Project_Luca.Levels
     {
         public Hero hero;
         public bool IsFinished = false;
-        public List<Level> levels = new List<Level>();
+        public Level1 level1;
+        public Level2 level2;
+        public Level3 level3;
         public List<Block> blocks = new List<Block>();
+        Texture2D grassTexture;
+        Texture2D dirtTexture;
+        int levelNr = 1;
         // 0 = air
         // 1 = grassblock
         // 2 = dirtblock
@@ -26,6 +32,8 @@ namespace GameDev_Project_Luca.Levels
 
         public void CreateBlocks(Texture2D grass, Texture2D dirt)
         {
+            grassTexture = grass;
+            dirtTexture = dirt;
             for (int l = 0; l < gameboard.GetLength(1); l++)
             {
                 for (int k = 0; k < gameboard.GetLength(0); k++)
@@ -56,6 +64,32 @@ namespace GameDev_Project_Luca.Levels
         public void Update(GameTime gameTime)
         {
             hero.Update(gameTime);
+        }
+
+        public void CheckLevelStatus()
+        {
+            if (IsFinished)
+            {
+                levelNr++;
+                switch (levelNr)
+                {
+                    case 1:
+                        gameboard = level1.gameboard;
+                        break;
+                    case 2:
+                        gameboard = level2.gameboard;
+                        break;
+                    case 3:
+                        gameboard = level3.gameboard;
+                        break;
+                    default:
+                        break;
+                }
+                IsFinished = false;
+                blocks.Clear();
+                CreateBlocks(grassTexture, dirtTexture);
+                    
+            }
         }
     }
 }

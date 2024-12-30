@@ -74,13 +74,14 @@ namespace GameDev_Project_Luca
             level2 = new Level2();
             level3 = new Level3();
 
-            level.levels.Add(level1);
-            level.levels.Add(level2);
-            level.levels.Add(level3);
+            level.level1 = level1;
+            level.level2 = level2;
+            level.level3 = level3;
 
             level.gameboard = level1.gameboard;
 
             level.hero = hero;
+            hero.level = level;
             level.CreateBlocks(grassBlock, dirtBlock);
             level.hero.blocks = level.blocks;
         }
@@ -90,6 +91,7 @@ namespace GameDev_Project_Luca
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             // TODO: Add your update logic here
+            level.CheckLevelStatus();
             level.Update(gameTime);
             base.Update(gameTime);
         }
