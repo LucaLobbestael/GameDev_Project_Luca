@@ -4,16 +4,20 @@ using GameDev_Project_Luca.GameObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace GameDev_Project_Luca.Levels
 {
     internal class Level
     {
         public Hero hero;
+        public Texture2D FlyingEnemy;
+        public Texture2D GuardingEnemy;
+        public Texture2D ShyEnemy;
         public bool IsFinished = false;
         public List<Block> blocks = new List<Block>();
         public List<Enemy> enemies = new List<Enemy>();
-        int levelNr = 1;
+        public int levelNr = 1;
         // 0 = air
         // 1 = grassblock
         // 2 = dirtblock
@@ -21,12 +25,14 @@ namespace GameDev_Project_Luca.Levels
         // 4 = flying enemy
         // 5 = shy enemy
         // 6 = guarding enemy
+        // 7 = coins
         // 8 = finish
         // 9 = killzone
         public int[,] gameboard;
 
         public void CreateBlocks(Texture2D grass, Texture2D dirt)
         {
+            IsFinished = false;
             for (int l = 0; l < gameboard.GetLength(1); l++)
             {
                 for (int k = 0; k < gameboard.GetLength(0); k++)
@@ -35,24 +41,25 @@ namespace GameDev_Project_Luca.Levels
                     {
                         blocks.Add(BlockFactory.CreateBlock(l * 50, k * 50, gameboard[k, l], grass, dirt));
                     }
-                    else if (gameboard[k, l] == 3 )
+                    else if (gameboard[k, l] == 3)
                     {
                         hero.position = new Vector2(l * 50, k * 50);
                     }
                     else if (gameboard[k, l] == 4)
                     {
-                        
+                        enemies.Add(new FlyingEnemy(FlyingEnemy, hero, l * 50, k * 50));
                     }
                     else if (gameboard[k, l] == 5)
                     {
-                        
+                        enemies.Add(new ShyEnemy(ShyEnemy, hero, l * 50, k * 50));
                     }
                     else if (gameboard[k, l] == 6)
                     {
-                        
+                        enemies.Add(new GuardingEnemy(GuardingEnemy, l * 50, k * 50));
                     }
                 }
             }
+            hero.Enemies = enemies;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -64,15 +71,19 @@ namespace GameDev_Project_Luca.Levels
                     block.Draw(spriteBatch);
                 }
             }
+            foreach (var enemy in enemies)
+            {
+                enemy.Draw(spriteBatch);
+            }
         }
 
         public void Update(GameTime gameTime)
         {
             hero.Update(gameTime);
-            /*foreach (var enemy in enemies)
+            foreach (var enemy in enemies)
             {
-                enemy.Update(gameTime)
-            }*/
+                enemy.Update(gameTime);
+            }
         }
 
         public bool CheckLevelStatus()
@@ -82,22 +93,11 @@ namespace GameDev_Project_Luca.Levels
 
         public int SwitchLevel()
         {
-            levelNr++;
-            IsFinished = false;
+            levelNr += 1;
             blocks.Clear();
             enemies.Clear();
-
-            switch (levelNr)
-            {
-                case 1:
-                    return 1;
-                case 2:
-                    return 2;
-                case 3:
-                    return 3;
-                default:
-                    return 4;
-            }
+            Debug.WriteLine(levelNr);
+            return levelNr;
         }
     }
 }

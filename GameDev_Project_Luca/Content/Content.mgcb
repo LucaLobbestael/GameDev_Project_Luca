@@ -109,6 +109,18 @@
 /processorParam:TextureFormat=Color
 /build:Hedgehog Sprite Sheet.png
 
+#begin Pidgeon Sprite Sheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Pidgeon Sprite Sheet.png
+
 #begin StartSelected.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -132,4 +144,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:TitleScreen.png
+
+#begin Victory.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Victory.png
 

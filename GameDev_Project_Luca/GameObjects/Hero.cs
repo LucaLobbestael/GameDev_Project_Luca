@@ -5,8 +5,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Reflection.Metadata.Ecma335;
 
 namespace GameDev_Project_Luca.GameObjects
 {
@@ -25,6 +23,7 @@ namespace GameDev_Project_Luca.GameObjects
         private bool isFalling;
         private bool reachedMaxJumpHeight;
         private IInputreader inputreader;
+        public bool TouchedFinish = false;
         //movement
         public Vector2 position;
         private Vector2 lastGroundedPosition;
@@ -39,6 +38,9 @@ namespace GameDev_Project_Luca.GameObjects
         public bool IsDead = false;
         // Level
         public Level level;
+        // HP & enemies
+        private int hp = 3;
+        public List<Enemy> Enemies;
 
 
         Vector2 IMovable.position { get => this.position; set => this.position = position; }
@@ -79,7 +81,7 @@ namespace GameDev_Project_Luca.GameObjects
             speed = new Vector2(1, 1);
             maxAccelleration = new Vector2(2, 25);
             maxSpeed = new Vector2(10, 10);
-            boundingBox = new Rectangle(6*scale, 22*scale, 17*scale, 10*scale);
+            boundingBox = new Rectangle(6 * scale, 22 * scale, 17 * scale, 10 * scale);
             isFalling = true;
             reachedMaxJumpHeight = false;
             collidedBlock = new Block();
@@ -87,14 +89,15 @@ namespace GameDev_Project_Luca.GameObjects
         public void Update(GameTime gameTime)
         {
             //set grounded && check if collided killzone
-            foreach (var block in blocks) 
+            foreach (var block in blocks)
             {
                 if (boundingBox.Intersects(block.BoundingBox))
                 {
                     collidedBlock = block;
                     position.Y -= 1;
                 }
-                if (block.GetType() == typeof(KillZone)){
+                if (block.GetType() == typeof(KillZone))
+                {
                     if (boundingBox.Intersects(block.BoundingBox))
                     {
                         IsDead = true;
@@ -123,9 +126,18 @@ namespace GameDev_Project_Luca.GameObjects
                 this.maxJumpHeight.Y = (this.lastGroundedPosition.Y -= 75);
             }
             // check if level is finished
-            if (collidedBlock.GetType() == typeof(FinishBlock))
+            if (TouchedFinish == false)
             {
-                level.IsFinished = true;
+                if (collidedBlock.GetType() == typeof(FinishBlock))
+                {
+                    TouchedFinish = true;
+                    level.IsFinished = true;
+                }
+
+            }
+            if (collidedBlock.GetType() != typeof(FinishBlock))
+            {
+                TouchedFinish = false;
             }
             Move();
             animation.Update(gameTime);
@@ -134,21 +146,21 @@ namespace GameDev_Project_Luca.GameObjects
         {
             if (!IsDead)
             {
-            //if go left look left and vice-versa
-            if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Q))
-            {
-                flipped = SpriteEffects.FlipHorizontally;
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
-            {
-                flipped = SpriteEffects.None;
-            }
-            //draw hero
-            spriteBatch.Draw(heroTexture, position, animation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, scale, flipped, 0f);
+                //if go left look left and vice-versa
+                if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Q))
+                {
+                    flipped = SpriteEffects.FlipHorizontally;
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
+                {
+                    flipped = SpriteEffects.None;
+                }
+                //draw hero
+                spriteBatch.Draw(heroTexture, position, animation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, scale, flipped, 0f);
             }
             else
             {
-               
+
             }
         }
         private void Move()
@@ -210,8 +222,8 @@ namespace GameDev_Project_Luca.GameObjects
 
             //moving left/right
             direction.X *= speed.X;
-            boundingBox.X = (int)position.X + 7*scale;
-            boundingBox.Y = (int)position.Y + 22*scale;
+            boundingBox.X = (int)position.X + 7 * scale;
+            boundingBox.Y = (int)position.Y + 22 * scale;
             boundingBox.X += (int)direction.X;
             boundingBox.Y += (int)direction.Y;
 
@@ -242,8 +254,12 @@ namespace GameDev_Project_Luca.GameObjects
                 {
                     position += direction;
                 }
-                
+
             }
+        }
+        public void FullRestore()
+        {
+            hp = 3;
         }
     }
 }

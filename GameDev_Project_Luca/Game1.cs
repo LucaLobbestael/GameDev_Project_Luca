@@ -17,9 +17,11 @@ namespace GameDev_Project_Luca
         private Texture2D _textureHero;
         private Texture2D _textureFly;
         private Texture2D _textureGuard;
+        private Texture2D _textureShy;
 
         private Gamestate gameState = new Gamestate();
         private Menu menu = new Menu();
+        private VictoryScreen victory = new VictoryScreen();
 
         Hero hero;
         Level level;
@@ -61,14 +63,16 @@ namespace GameDev_Project_Luca
             // background + HUD
             background = Content.Load<Texture2D>("background-lake");
             deathScreen = Content.Load<Texture2D>("DeathScreen");
-            //Titlescreen
+            //Screens
             menu.titleScreen = Content.Load<Texture2D>("TitleScreen");
             menu.startSelected = Content.Load<Texture2D>("StartSelected");
             menu.ExitSelected = Content.Load<Texture2D>("ExitSelected");
+            victory.Victory = Content.Load<Texture2D>("Victory");
             // hero + enemies
             _textureHero = Content.Load<Texture2D>("Hedgehog Sprite Sheet");
             _textureFly = Content.Load<Texture2D>("Giant Fly Sprite Sheet");
             _textureGuard = Content.Load<Texture2D>("Fox Sprite Sheet");
+            _textureShy = Content.Load<Texture2D>("Pidgeon Sprite Sheet");
 
             // blocks
             grassBlock = Content.Load<Texture2D>("GrassBlock");
@@ -86,6 +90,9 @@ namespace GameDev_Project_Luca
 
             level.gameboard = level1.gameboard;
 
+            level.FlyingEnemy = _textureFly;
+            level.GuardingEnemy = _textureGuard;
+            level.ShyEnemy = _textureShy;
             level.hero = hero;
             hero.level = level;
             level.CreateBlocks(grassBlock, dirtBlock);
@@ -123,24 +130,36 @@ namespace GameDev_Project_Luca
                     {
                         case 1:
                             level.gameboard = level1.gameboard;
+                            level.CreateBlocks(grassBlock, dirtBlock);
                             break;
                         case 2:
                             level.gameboard = level2.gameboard;
+                            level.CreateBlocks(grassBlock, dirtBlock);
                             break;
                         case 3:
                             level.gameboard = level3.gameboard;
+                            level.CreateBlocks(grassBlock, dirtBlock);
                             break;
                         case 4:
-                            gameState.changeState(3);
+                            gameState.changeState(2);
                             break;
                     }
-                    level.CreateBlocks(grassBlock, dirtBlock);
                 }
                 level.Update(gameTime);
             }
-            if (gameState.CheckState() == 3)
+            if (gameState.CheckState() == 2)
+            {
+                bool retry = victory.Update();
+                if (retry == true)
+                {
+                    gameState.changeState(0);
+                    level.gameboard = level1.gameboard;
+                    level.CreateBlocks(grassBlock, dirtBlock);
+                    level.levelNr = 1;
+                }
+            }
 
-            base.Update(gameTime);
+                base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
@@ -150,19 +169,23 @@ namespace GameDev_Project_Luca
             // TODO: Add your drawing code here
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             _spriteBatch.Draw(background, new Rectangle(0, 0, 1920, 1080), Color.White);
+
             if (gameState.CheckState() == 0)
                 menu.Draw(_spriteBatch);
+
             if (gameState.CheckState() == 1)
             {
-            level.Draw(_spriteBatch);
-            level.hero.Draw(_spriteBatch);
-            if (level.hero.IsDead)
-            {
-                _spriteBatch.Draw(deathScreen, new Rectangle(0, 0, 1920, 1080), Color.White);
+                level.Draw(_spriteBatch);
+                level.hero.Draw(_spriteBatch);
+                if (level.hero.IsDead)
+                {
+                    _spriteBatch.Draw(deathScreen, new Rectangle(0, 0, 1920, 1080), Color.White);
+                }
             }
-                
-            }
-            //if (gameState.CheckState() == 3)
+
+            if (gameState.CheckState() == 2)
+                victory.Draw(_spriteBatch);
+
             _spriteBatch.End();
 
             base.Draw(gameTime);

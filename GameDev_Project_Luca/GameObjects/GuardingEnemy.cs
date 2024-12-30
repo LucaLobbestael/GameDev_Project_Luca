@@ -13,20 +13,31 @@ namespace GameDev_Project_Luca.GameObjects
     {
         //textures & animation
         private Texture2D texture;
-        private Animation.Animation idleAnimation;
         private Animation.Animation walkingAnimation;
-        private Animation.Animation deathAnimation;
         Animation.Animation animation;
         private SpriteEffects flipped = new SpriteEffects();
         //movement related
         private float boundary = 45f;
         private Vector2 speed = new Vector2(0.75f, 0.75f);
         Vector2 position;
-        Vector2 startingPosition = new Vector2(1350, 650);
+        Vector2 startingPosition;
         Vector2 direction;
         bool hasFlipped = false;
-        public GuardingEnemy()
+        public GuardingEnemy(Texture2D texture, int x, int y)
         {
+            //set texture
+            this.texture = texture;
+            //init animations
+            walkingAnimation = new Animation.Animation();
+            //flyinganimation
+            walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(0, 0, 32, 32)));
+            walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 0, 32, 32)));
+            walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 0, 32, 32)));
+            walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(96, 0, 32, 32)));
+            //set animation
+            animation = walkingAnimation;
+            //set position
+            startingPosition = new Vector2(x, y);
             position = startingPosition;
         }
 

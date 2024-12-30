@@ -18,27 +18,23 @@ namespace GameDev_Project_Luca.GameObjects
         Vector2 position = new Vector2(100, 100);
         Vector2 direction;
 
-        public ShyEnemy(Texture2D texture, Hero hero)
+        public ShyEnemy(Texture2D texture, Hero hero, int x, int y)
         {
             //set texture
             this.texture = texture;
             //init animations
             flyingAnimation = new Animation.Animation();
-            deathAnimation = new Animation.Animation();
             //flyinganimation
             flyingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(0, 0, 32, 32)));
             flyingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 0, 32, 32)));
             flyingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 0, 32, 32)));
             flyingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(96, 0, 32, 32)));
-            //deathanimation
-            deathAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(0, 96, 32, 32)));
-            deathAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 96, 32, 32)));
-            deathAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 96, 32, 32)));
-            deathAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(96, 96, 32, 32)));
             //set target
             target = hero;
             //set animation
             animation = flyingAnimation;
+            //set position
+            position = new Vector2(x, y);
         }
         public void Draw(SpriteBatch spriteBatch)
         {
