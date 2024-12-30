@@ -1,6 +1,7 @@
 ﻿using GameDev_Project_Luca.Factories;
 using GameDev_Project_Luca.GameComponents;
 using GameDev_Project_Luca.GameObjects;
+using GameDev_Project_Luca.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace GameDev_Project_Luca.Levels
         public Texture2D ShyEnemy;
         public bool IsFinished = false;
         public List<Block> blocks = new List<Block>();
-        public List<Enemy> enemies = new List<Enemy>();
+        public List<IEnemy> enemies = new List<IEnemy>();
         public int levelNr = 1;
         // 0 = air
         // 1 = grassblock
@@ -71,6 +72,7 @@ namespace GameDev_Project_Luca.Levels
                     block.Draw(spriteBatch);
                 }
             }
+
             foreach (var enemy in enemies)
             {
                 enemy.Draw(spriteBatch);

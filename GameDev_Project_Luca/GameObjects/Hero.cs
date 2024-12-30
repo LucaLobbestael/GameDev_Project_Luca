@@ -40,7 +40,8 @@ namespace GameDev_Project_Luca.GameObjects
         public Level level;
         // HP & enemies
         private int hp = 3;
-        public List<Enemy> Enemies;
+        public List<IEnemy> Enemies;
+        private int iFrames = 0;
 
 
         Vector2 IMovable.position { get => this.position; set => this.position = position; }
@@ -139,6 +140,22 @@ namespace GameDev_Project_Luca.GameObjects
             {
                 TouchedFinish = false;
             }
+
+            //damage
+            if (iFrames == 0)
+            {
+                foreach (var enemy in Enemies)
+                {
+                    if (boundingBox.Intersects(enemy.BoundingBox))
+                    {
+                        takeDamage();
+                    }
+                }
+            }
+            else
+            {
+                iFrames--;
+            }
             Move();
             animation.Update(gameTime);
         }
@@ -155,8 +172,11 @@ namespace GameDev_Project_Luca.GameObjects
                 {
                     flipped = SpriteEffects.None;
                 }
-                //draw hero
-                spriteBatch.Draw(heroTexture, position, animation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, scale, flipped, 0f);
+                if (iFrames % 2 == 0 || iFrames == 0)
+                {
+                    //draw hero
+                    spriteBatch.Draw(heroTexture, position, animation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, scale, flipped, 0f);
+                }
             }
             else
             {
@@ -260,6 +280,12 @@ namespace GameDev_Project_Luca.GameObjects
         public void FullRestore()
         {
             hp = 3;
+        }
+
+        private void takeDamage()
+        {
+            hp--;
+            iFrames = 90;
         }
     }
 }

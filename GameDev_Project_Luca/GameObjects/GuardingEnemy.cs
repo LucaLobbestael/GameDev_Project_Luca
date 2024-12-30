@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 
 namespace GameDev_Project_Luca.GameObjects
 {
-    internal class GuardingEnemy : Enemy, IGameObject
+    internal class GuardingEnemy : IEnemy, IGameObject
     {
         //textures & animation
         private Texture2D texture;
         private Animation.Animation walkingAnimation;
         Animation.Animation animation;
+        int scale = 2;
         private SpriteEffects flipped = new SpriteEffects();
         //movement related
         private float boundary = 45f;
@@ -23,6 +24,10 @@ namespace GameDev_Project_Luca.GameObjects
         Vector2 startingPosition;
         Vector2 direction;
         bool hasFlipped = false;
+        private Rectangle boundingBox;
+
+        public Rectangle BoundingBox { get => boundingBox; set => boundingBox = value; }
+
         public GuardingEnemy(Texture2D texture, int x, int y)
         {
             //set texture
@@ -30,15 +35,16 @@ namespace GameDev_Project_Luca.GameObjects
             //init animations
             walkingAnimation = new Animation.Animation();
             //flyinganimation
-            walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(0, 0, 32, 32)));
-            walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 0, 32, 32)));
-            walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 0, 32, 32)));
-            walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(96, 0, 32, 32)));
+            walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(0, 64, 32, 32)));
+            walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 64, 32, 32))); //(32x32), 20x15
+            walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 64, 32, 32)));
+            walkingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(96, 64, 32, 32)));
             //set animation
             animation = walkingAnimation;
             //set position
-            startingPosition = new Vector2(x, y);
+            startingPosition = new Vector2(x, y-15);
             position = startingPosition;
+            boundingBox = new Rectangle(x + 6, y + 2, 20*scale, 15*scale);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -47,7 +53,8 @@ namespace GameDev_Project_Luca.GameObjects
                 flipped = SpriteEffects.FlipHorizontally;
             else
                 flipped = SpriteEffects.None;
-            spriteBatch.Draw(texture, position, animation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 1, flipped, 0f);
+
+            spriteBatch.Draw(texture, position, animation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, scale, flipped, 0f);
         }
 
         public void Update(GameTime gameTime)
@@ -77,6 +84,7 @@ namespace GameDev_Project_Luca.GameObjects
         public void Move()
         {
             position.X += (direction.X * speed.X);
+            boundingBox.X = (int)position.X;
         }
     }
 }

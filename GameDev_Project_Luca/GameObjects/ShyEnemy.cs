@@ -1,22 +1,27 @@
 ﻿using GameDev_Project_Luca.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Text.Json;
+using System.Threading;
 
 namespace GameDev_Project_Luca.GameObjects
 {
-    internal class ShyEnemy : Enemy, IGameObject
+    internal class ShyEnemy : IEnemy, IGameObject
     {
         //textures & animation
         private Texture2D texture;
         private Animation.Animation flyingAnimation;
-        private Animation.Animation deathAnimation;
         Animation.Animation animation;
         private SpriteEffects flipped = new SpriteEffects();
+        int scale = 2;
         //movement related
         private Hero target;
         private Vector2 speed = new Vector2(0.5f, 0.5f);
         Vector2 position = new Vector2(100, 100);
         Vector2 direction;
+        private Rectangle boundingBox;
+
+        public Rectangle BoundingBox { get => boundingBox; set => boundingBox = value; }
 
         public ShyEnemy(Texture2D texture, Hero hero, int x, int y)
         {
@@ -42,7 +47,7 @@ namespace GameDev_Project_Luca.GameObjects
                 flipped = SpriteEffects.FlipHorizontally;
             else
                 flipped = SpriteEffects.None;
-            spriteBatch.Draw(texture, position, animation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 1, flipped, 0f);
+            spriteBatch.Draw(texture, position, animation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, scale, flipped, 0f);
         }
 
         public void Update(GameTime gameTime)
@@ -65,6 +70,10 @@ namespace GameDev_Project_Luca.GameObjects
                 {
                     direction.Y = 1;
                 }
+            }
+            else
+            {
+                direction = new Vector2(0, 0);
             }
             this.Move();
             animation.Update(gameTime);

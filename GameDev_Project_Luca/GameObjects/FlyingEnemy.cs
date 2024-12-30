@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GameDev_Project_Luca.GameObjects
 {
-    internal class FlyingEnemy : Enemy, IGameObject
+    internal class FlyingEnemy : IEnemy, IGameObject
     {
         //textures & animation
         private Texture2D texture;
@@ -22,6 +22,9 @@ namespace GameDev_Project_Luca.GameObjects
         private Vector2 speed = new Vector2(0.75f, 1f);
         Vector2 position;
         Vector2 direction;
+        private Rectangle boundingBox;
+
+        public Rectangle BoundingBox { get => boundingBox; set => boundingBox = value; }
 
         public FlyingEnemy(Texture2D texture, Hero hero, int x, int y)
         {
