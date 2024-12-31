@@ -22,6 +22,10 @@ namespace GameDev_Project_Luca
         private Texture2D _textureHealthTwo;
         private Texture2D _textureHealthOne;
         private Texture2D _textureHealthEmpty;
+        private Texture2D _textureCoin;
+
+        private SpriteFont textFont;
+        private Vector2 fontPos;
 
         private Gamestate gameState = new Gamestate();
         private Menu menu = new Menu();
@@ -49,7 +53,7 @@ namespace GameDev_Project_Luca
             TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
-            //_graphics.IsFullScreen = true;
+            _graphics.IsFullScreen = true;
         }
 
         protected override void Initialize()
@@ -64,6 +68,11 @@ namespace GameDev_Project_Luca
 
 
             // TODO: use this.Content to load your game content here
+            // CoinCounter font
+            textFont = Content.Load<SpriteFont>("Font");
+            Viewport viewport = _graphics.GraphicsDevice.Viewport;
+
+            fontPos = new Vector2(viewport.Width / 2, viewport.Height / 2);
             // background + HUD
             background = Content.Load<Texture2D>("background-lake");
             deathScreen = Content.Load<Texture2D>("DeathScreen");
@@ -71,20 +80,21 @@ namespace GameDev_Project_Luca
             _textureHealthTwo = Content.Load<Texture2D>("2Health");
             _textureHealthOne = Content.Load<Texture2D>("1Health");
             _textureHealthEmpty = Content.Load<Texture2D>("Dead");
-            //Screens
+            // Screens
             menu.titleScreen = Content.Load<Texture2D>("TitleScreen");
             menu.startSelected = Content.Load<Texture2D>("StartSelected");
             menu.ExitSelected = Content.Load<Texture2D>("ExitSelected");
             victory.Victory = Content.Load<Texture2D>("Victory");
-            // hero + enemies
+            // Hero + enemies
             _textureHero = Content.Load<Texture2D>("Hedgehog Sprite Sheet");
             _textureFly = Content.Load<Texture2D>("Giant Fly Sprite Sheet");
             _textureGuard = Content.Load<Texture2D>("Fox Sprite Sheet");
             _textureShy = Content.Load<Texture2D>("Pidgeon Sprite Sheet");
 
-            // blocks
+            // Level building
             grassBlock = Content.Load<Texture2D>("GrassBlock");
             dirtBlock = Content.Load<Texture2D>("DirtTexture");
+            _textureCoin = Content.Load<Texture2D>("RotatingCoin_spritSheet");
             InitializeGameObjects();
         }
 
@@ -102,6 +112,7 @@ namespace GameDev_Project_Luca
             level.GuardingEnemy = _textureGuard;
             level.ShyEnemy = _textureShy;
             level.hero = hero;
+            level.CoinTexture = _textureCoin;
 
             level.hero.FullHealth = _textureHealthFull;
             level.hero.TwoHealth = _textureHealthTwo;
@@ -171,10 +182,11 @@ namespace GameDev_Project_Luca
                     level.CreateBlocks(grassBlock, dirtBlock);
                     level.levelNr = 1;
                     level.hero.FullRestore();
+                    level.hero.CoinsCollected = 0;
                 }
             }
 
-                base.Update(gameTime);
+            base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
@@ -199,7 +211,13 @@ namespace GameDev_Project_Luca
             }
 
             if (gameState.CheckState() == 2)
+            {
                 victory.Draw(_spriteBatch);
+                string output = $"Coins Collected: {level.hero.CoinsCollected}";
+                Vector2 FontOrigin = textFont.MeasureString(output) / 2;
+                _spriteBatch.DrawString(textFont, output, fontPos, Color.White, 0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
+
+            }
 
             _spriteBatch.End();
 

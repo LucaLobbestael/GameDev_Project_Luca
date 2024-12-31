@@ -15,10 +15,12 @@ namespace GameDev_Project_Luca.Levels
         public Texture2D FlyingEnemy;
         public Texture2D GuardingEnemy;
         public Texture2D ShyEnemy;
+        public Texture2D CoinTexture;
 
         public bool IsFinished = false;
         public List<Block> blocks = new List<Block>();
         public List<IEnemy> enemies = new List<IEnemy>();
+        public List<Coin> Coins = new List<Coin>();
         public int levelNr = 1;
         // 0 = air
         // 1 = grassblock
@@ -39,7 +41,7 @@ namespace GameDev_Project_Luca.Levels
             {
                 for (int k = 0; k < gameboard.GetLength(0); k++)
                 {
-                    if (gameboard[k, l] != 3 && gameboard[k, l] != 4 && gameboard[k, l] != 5 && gameboard[k, l] != 6)
+                    if (gameboard[k, l] != 3 && gameboard[k, l] != 4 && gameboard[k, l] != 5 && gameboard[k, l] != 6 && gameboard[k, l] != 7)
                     {
                         blocks.Add(BlockFactory.CreateBlock(l * 50, k * 50, gameboard[k, l], grass, dirt));
                     }
@@ -59,9 +61,14 @@ namespace GameDev_Project_Luca.Levels
                     {
                         enemies.Add(new GuardingEnemy(GuardingEnemy, l * 50, k * 50));
                     }
+                    else if (gameboard[k,l] == 7)
+                    {
+                        Coins.Add(new Coin(CoinTexture, l * 50, k * 50));
+                    }
                 }
             }
             hero.Enemies = enemies;
+            hero.Coins = Coins;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -78,6 +85,11 @@ namespace GameDev_Project_Luca.Levels
             {
                 enemy.Draw(spriteBatch);
             }
+
+            foreach (var coin in Coins)
+            {
+                coin.Draw(spriteBatch);
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -86,6 +98,10 @@ namespace GameDev_Project_Luca.Levels
             foreach (var enemy in enemies)
             {
                 enemy.Update(gameTime);
+            }
+            foreach (var coin in Coins)
+            {
+                coin.Update(gameTime);
             }
         }
 
