@@ -30,16 +30,17 @@ namespace GameDev_Project_Luca.GameObjects
             //init animations
             flyingAnimation = new Animation.Animation();
             //flyinganimation
-            flyingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(0, 0, 32, 32)));
-            flyingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 0, 32, 32)));
-            flyingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 0, 32, 32)));
-            flyingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(96, 0, 32, 32)));
+            flyingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(0, 96, 32, 32))); //(127/127)
+            flyingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(32, 96, 32, 32)));
+            flyingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(64, 96, 32, 32)));
+            flyingAnimation.AddFrame(new Animation.AnimationFrame(new Rectangle(96, 96, 32, 32)));
             //set target
             target = hero;
             //set animation
             animation = flyingAnimation;
             //set position
             position = new Vector2(x, y);
+            boundingBox = new Rectangle(x + 8, y + 18, 14 * scale, 12 * scale);
         }
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -83,6 +84,8 @@ namespace GameDev_Project_Luca.GameObjects
         {
             position.X += (direction.X * speed.X);
             position.Y += (direction.Y * speed.Y);
+            boundingBox.X = (int)position.X;
+            boundingBox.Y = (int)position.Y;
         }
     }
 }

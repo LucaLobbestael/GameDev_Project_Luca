@@ -18,6 +18,10 @@ namespace GameDev_Project_Luca
         private Texture2D _textureFly;
         private Texture2D _textureGuard;
         private Texture2D _textureShy;
+        private Texture2D _textureHealthFull;
+        private Texture2D _textureHealthTwo;
+        private Texture2D _textureHealthOne;
+        private Texture2D _textureHealthEmpty;
 
         private Gamestate gameState = new Gamestate();
         private Menu menu = new Menu();
@@ -63,6 +67,10 @@ namespace GameDev_Project_Luca
             // background + HUD
             background = Content.Load<Texture2D>("background-lake");
             deathScreen = Content.Load<Texture2D>("DeathScreen");
+            _textureHealthFull = Content.Load<Texture2D>("FullHealth");
+            _textureHealthTwo = Content.Load<Texture2D>("2Health");
+            _textureHealthOne = Content.Load<Texture2D>("1Health");
+            _textureHealthEmpty = Content.Load<Texture2D>("Dead");
             //Screens
             menu.titleScreen = Content.Load<Texture2D>("TitleScreen");
             menu.startSelected = Content.Load<Texture2D>("StartSelected");
@@ -94,6 +102,12 @@ namespace GameDev_Project_Luca
             level.GuardingEnemy = _textureGuard;
             level.ShyEnemy = _textureShy;
             level.hero = hero;
+
+            level.hero.FullHealth = _textureHealthFull;
+            level.hero.TwoHealth = _textureHealthTwo;
+            level.hero.OneHealth = _textureHealthOne;
+            level.hero.NoHealth = _textureHealthEmpty;
+
             hero.level = level;
             level.CreateBlocks(grassBlock, dirtBlock);
             level.hero.blocks = level.blocks;
@@ -156,6 +170,7 @@ namespace GameDev_Project_Luca
                     level.gameboard = level1.gameboard;
                     level.CreateBlocks(grassBlock, dirtBlock);
                     level.levelNr = 1;
+                    level.hero.FullRestore();
                 }
             }
 

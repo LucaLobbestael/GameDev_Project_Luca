@@ -15,6 +15,7 @@ namespace GameDev_Project_Luca.Levels
         public Texture2D FlyingEnemy;
         public Texture2D GuardingEnemy;
         public Texture2D ShyEnemy;
+
         public bool IsFinished = false;
         public List<Block> blocks = new List<Block>();
         public List<IEnemy> enemies = new List<IEnemy>();

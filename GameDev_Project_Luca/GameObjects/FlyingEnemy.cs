@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace GameDev_Project_Luca.GameObjects
 {
@@ -17,6 +18,7 @@ namespace GameDev_Project_Luca.GameObjects
         private Animation.Animation flyingAnimation;
         Animation.Animation animation;
         private SpriteEffects flipped = new SpriteEffects();
+        int scale = 2;
         //movement related
         private Hero target;
         private Vector2 speed = new Vector2(0.75f, 1f);
@@ -43,6 +45,7 @@ namespace GameDev_Project_Luca.GameObjects
             animation = flyingAnimation;
             //set position
             position = new Vector2(x, y);
+            boundingBox = new Rectangle(x + 5, y + 7, 17 * scale, 17 * scale);
         }
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -50,7 +53,7 @@ namespace GameDev_Project_Luca.GameObjects
                 flipped = SpriteEffects.FlipHorizontally;
             else
                 flipped = SpriteEffects.None;
-            spriteBatch.Draw(texture, position, animation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 1, flipped, 0f);
+            spriteBatch.Draw(texture, position, animation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, scale, flipped, 0f);
         }
 
         public void Update(GameTime gameTime)
@@ -79,6 +82,8 @@ namespace GameDev_Project_Luca.GameObjects
         {
             position.X += (direction.X * speed.X);
             position.Y += (direction.Y * speed.Y);
+            boundingBox.X = (int)position.X;
+            boundingBox.Y = (int)position.Y;
         }
     }
 }

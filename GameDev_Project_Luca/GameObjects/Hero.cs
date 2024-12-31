@@ -16,6 +16,12 @@ namespace GameDev_Project_Luca.GameObjects
         private Animation.Animation idleAnimation;
         private Animation.Animation walkingAnimation;
         private Animation.Animation layingAnimation;
+        public Texture2D FullHealth;
+        public Texture2D TwoHealth;
+        public Texture2D OneHealth;
+        public Texture2D NoHealth;
+
+        private Texture2D currentHealth;
         public SpriteEffects flipped = new SpriteEffects();
         private int scale = 2;
         //checks
@@ -101,7 +107,7 @@ namespace GameDev_Project_Luca.GameObjects
                 {
                     if (boundingBox.Intersects(block.BoundingBox))
                     {
-                        IsDead = true;
+                        hp = 0;
                     }
                 }
 
@@ -156,6 +162,29 @@ namespace GameDev_Project_Luca.GameObjects
             {
                 iFrames--;
             }
+            if (hp == 0)
+            {
+                IsDead = true;
+            }
+
+            switch (hp)
+            {
+                case 3:
+                    currentHealth = FullHealth;
+                    break;
+                case 2:
+                    currentHealth = TwoHealth;
+                    break;
+                case 1:
+                    currentHealth = OneHealth;
+                    break;
+                case 0:
+                    currentHealth = NoHealth;
+                    break;
+                default:
+                    currentHealth = NoHealth;
+                    break;
+            }
             Move();
             animation.Update(gameTime);
         }
@@ -178,10 +207,7 @@ namespace GameDev_Project_Luca.GameObjects
                     spriteBatch.Draw(heroTexture, position, animation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, scale, flipped, 0f);
                 }
             }
-            else
-            {
-
-            }
+            spriteBatch.Draw(currentHealth, new Vector2(0,0), new Rectangle(0, 0, 33, 10), Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
         }
         private void Move()
         {
