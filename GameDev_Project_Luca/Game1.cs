@@ -1,12 +1,14 @@
 ﻿using GameDev_Project_Luca.GameComponents;
 using GameDev_Project_Luca.GameObjects;
 using GameDev_Project_Luca.Input;
+using GameDev_Project_Luca.Interfaces;
 using GameDev_Project_Luca.Levels;
 using GameDev_Project_Luca.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace GameDev_Project_Luca
 {
@@ -170,6 +172,7 @@ namespace GameDev_Project_Luca
                             break;
                     }
                 }
+                
                 level.Update(gameTime);
             }
             if (gameState.CheckState() == 2)

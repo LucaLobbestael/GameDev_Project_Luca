@@ -132,7 +132,7 @@ namespace GameDev_Project_Luca.GameObjects
             if (isGrounded)
             {
                 this.lastGroundedPosition = position;
-                this.maxJumpHeight.Y = (this.lastGroundedPosition.Y -= 75);
+                this.maxJumpHeight.Y = (this.lastGroundedPosition.Y -= 125);
             }
             // check if level is finished
             if (TouchedFinish == false)
