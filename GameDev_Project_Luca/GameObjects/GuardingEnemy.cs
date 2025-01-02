@@ -1,11 +1,6 @@
 ﻿using GameDev_Project_Luca.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameDev_Project_Luca.GameObjects
 {
@@ -42,9 +37,9 @@ namespace GameDev_Project_Luca.GameObjects
             //set animation
             animation = walkingAnimation;
             //set position
-            startingPosition = new Vector2(x, y-15);
+            startingPosition = new Vector2(x, y - 15);
             position = startingPosition;
-            boundingBox = new Rectangle(x + 6, y + 2, 20*scale, 15*scale);
+            boundingBox = new Rectangle(x + 6, y + 2, 20 * scale, 15 * scale);
         }
 
         public void Draw(SpriteBatch spriteBatch)

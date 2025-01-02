@@ -1,8 +1,6 @@
 ﻿using GameDev_Project_Luca.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Text.Json;
-using System.Threading;
 
 namespace GameDev_Project_Luca.GameObjects
 {

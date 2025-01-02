@@ -1,14 +1,12 @@
 ﻿using GameDev_Project_Luca.GameComponents;
 using GameDev_Project_Luca.GameObjects;
 using GameDev_Project_Luca.Input;
-using GameDev_Project_Luca.Interfaces;
 using GameDev_Project_Luca.Levels;
 using GameDev_Project_Luca.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
 
 namespace GameDev_Project_Luca
 {
@@ -60,7 +58,6 @@ namespace GameDev_Project_Luca
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
             base.Initialize();
         }
 
@@ -68,8 +65,6 @@ namespace GameDev_Project_Luca
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-
-            // TODO: use this.Content to load your game content here
             // CoinCounter font
             textFont = Content.Load<SpriteFont>("Font");
             Viewport viewport = _graphics.GraphicsDevice.Viewport;
@@ -130,7 +125,6 @@ namespace GameDev_Project_Luca
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            // TODO: Add your update logic here
             if (gameState.CheckState() == 0)
             {
                 bool enter = menu.Update();
@@ -172,7 +166,7 @@ namespace GameDev_Project_Luca
                             break;
                     }
                 }
-                
+
                 level.Update(gameTime);
             }
             if (gameState.CheckState() == 2)
@@ -196,7 +190,6 @@ namespace GameDev_Project_Luca
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             _spriteBatch.Draw(background, new Rectangle(0, 0, 1920, 1080), Color.White);
 

@@ -198,7 +198,7 @@ namespace GameDev_Project_Luca.GameObjects
                         CoinsCollected++;
                     }
                 }
-                
+
             }
             Move();
             animation.Update(gameTime);
@@ -222,7 +222,7 @@ namespace GameDev_Project_Luca.GameObjects
                     spriteBatch.Draw(heroTexture, position, animation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, scale, flipped, 0f);
                 }
             }
-            spriteBatch.Draw(currentHealth, new Vector2(0,0), new Rectangle(0, 0, 33, 10), Color.White, 0f, Vector2.Zero, 5, SpriteEffects.None, 0f);
+            spriteBatch.Draw(currentHealth, new Vector2(0, 0), new Rectangle(0, 0, 33, 10), Color.White, 0f, Vector2.Zero, 5, SpriteEffects.None, 0f);
         }
         private void Move()
         {

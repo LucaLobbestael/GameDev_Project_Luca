@@ -1,13 +1,6 @@
-﻿using GameDev_Project_Luca.Animation;
-using GameDev_Project_Luca.Interfaces;
+﻿using GameDev_Project_Luca.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace GameDev_Project_Luca.GameObjects
 {
@@ -58,11 +51,11 @@ namespace GameDev_Project_Luca.GameObjects
 
         public void Update(GameTime gameTime)
         {
-            if(target.boundingBox.X < this.position.X)
+            if (target.boundingBox.X < this.position.X)
             {
                 direction.X = -1;
             }
-            else if(target.boundingBox.X > this.position.X)
+            else if (target.boundingBox.X > this.position.X)
             {
                 direction.X = 1;
             }
@@ -70,7 +63,7 @@ namespace GameDev_Project_Luca.GameObjects
             {
                 direction.Y = -1;
             }
-            else if(target.boundingBox.Y > this.position.Y)
+            else if (target.boundingBox.Y > this.position.Y)
             {
                 direction.Y = 1;
             }

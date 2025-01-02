@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using GameDev_Project_Luca.Interfaces;
 
 namespace GameDev_Project_Luca.GameComponents
 {

@@ -1,14 +1,6 @@
-﻿using GameDev_Project_Luca.Factories;
-using GameDev_Project_Luca.GameComponents;
-using GameDev_Project_Luca.GameObjects;
-using GameDev_Project_Luca.Interfaces;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-
-namespace GameDev_Project_Luca.Levels
+﻿namespace GameDev_Project_Luca.Levels
 {
-    class Level1:Level
+    class Level1 : Level
     {
         // 0 = air
         // 1 = grassblock

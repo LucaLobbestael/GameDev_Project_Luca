@@ -61,7 +61,7 @@ namespace GameDev_Project_Luca.Levels
                     {
                         enemies.Add(new GuardingEnemy(GuardingEnemy, l * 50, k * 50));
                     }
-                    else if (gameboard[k,l] == 7)
+                    else if (gameboard[k, l] == 7)
                     {
                         Coins.Add(new Coin(CoinTexture, l * 50, k * 50));
                     }
